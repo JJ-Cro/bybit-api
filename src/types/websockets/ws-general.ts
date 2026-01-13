@@ -1,4 +1,4 @@
-import { ClientRequestArgs } from 'http';
+import type { ClientRequestArgs } from 'http';
 import WebSocket from 'isomorphic-ws';
 
 import { RestClientOptions, WS_KEY_MAP } from '../../util';
