@@ -80,6 +80,10 @@ Professional Node.js, JavaScript & TypeScript SDK for the Bybit REST APIs, WebSo
 - [Websocket API - Sending Orders via WebSockets](#websocket-api---sending-orders-via-websockets)
 - [Consumer Load Balancing](#balancing-load-across-multiple-connections)
 
+## Bybit EU & Other Regions
+
+- [REST API Usage with Bybit EU](#rest-api-usage-with-bybit-eu)
+
 ## Additional Features
 
 - [Logging](#logging)
@@ -111,11 +115,11 @@ Professional Node.js, JavaScript & TypeScript SDK for the Bybit REST APIs, WebSo
 
 ## Related Projects
 
-Check out my related JavaScript/TypeScript/Node.js projects:
+Check out my related JavaScript/TypeScript/Node.js SDKs & projects:
 
 - Try our REST API & WebSocket SDKs published on npmjs:
   - [Bybit Node.js SDK: bybit-api](https://www.npmjs.com/package/bybit-api)
-  - [Kraken Node.js SDK: @siebly/kraken-api](https://www.npmjs.com/package/coinbase-api)
+  - [Kraken Node.js SDK: @siebly/kraken-api](https://www.npmjs.com/package/@siebly/kraken-api)
   - [OKX Node.js SDK: okx-api](https://www.npmjs.com/package/okx-api)
   - [Binance Node.js SDK: binance](https://www.npmjs.com/package/binance)
   - [Gate (gate.com) Node.js SDK: gateio-api](https://www.npmjs.com/package/gateio-api)
@@ -549,6 +553,54 @@ const wsClientGroup2 = new WebsocketClient();
 ```
 
 Important: do not subscribe to the same topics on both clients or you will receive duplicate messages (once per WS client).
+
+---
+
+## Bybit EU & Other Regions
+
+By default, this Node.js, JavaScript & TypeScript SDK uses the Bybit Global API & WebSocket domains. For regions where Bybit has dedicated regional domains, including the alternative Bybit Global domain (bytick), these can be configured in the REST Client using the `apiRegion` property.
+
+The following values are currently supported in this option:
+
+- `apiRegion: undefined`: if missing or undefined, this SDK will default to the Bybit Global domain `api.bybit.com`.
+- `apiRegion: "default"`: the Bybit Global domain (same behaviour as above).
+- `apiRegion: "bytick"`: the alternative Bybit Global domain `api.bytick.com`.
+- `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bytick.nl`.
+- `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit-tr.com`.
+- `apiRegion: "KZ"`: the dedicated Bybit Kazakhstan domain `api.bybit.kz`.
+- `apiRegion: "HK"`: the dedicated Bybit HK domain `api.byhkbit.com`.
+- `apiRegion: "GE"`: the dedicated Bybit Georgia domain `api.bybitgeorgia.ge`.
+- `apiRegion: "UAE"`: the dedicated Bybit United Arab Emirates domain `api.bybit.ae`.
+- `apiRegion: "EU"`: the dedicated Bybit EU/EEA domain `api.bybit.eu`.
+
+New regions will be supported when they become available in the Bybit API. If you notice any regions that have not been added yet, please open a new issue on GitHub.
+
+### REST API Usage with Bybit EU
+
+Below is an example for using this Node.js, TypeScript & JavaScript SDK for Bybit's APIs, using an account registered on the Bybit EU domain:
+
+```typescript
+const { RestClientV5 } = require('bybit-api');
+// or
+// import { RestClientV5 } from 'bybit-api';
+
+const client = new RestClientV5({
+  key: API_KEY,
+  secret: API_SECRET,
+  // demoTrading: true,
+
+  apiRegion: 'EU',
+});
+
+client
+  .getAccountInfo()
+  .then((result) => {
+    console.log('getAccountInfo result: ', result);
+  })
+  .catch((err) => {
+    console.error('getAccountInfo error: ', err);
+  });
+```
 
 ---
 

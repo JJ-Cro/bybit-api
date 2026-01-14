@@ -2,6 +2,17 @@ import { AxiosResponse } from 'axios';
 
 import { APIRateLimit } from '../types';
 
+export type APIRegion =
+  | 'default'
+  | 'bytick'
+  | 'NL'
+  | 'TK'
+  | 'KZ'
+  | 'HK'
+  | 'GE'
+  | 'UAE'
+  | 'EU';
+
 export interface RestClientOptions {
   /** Your API key */
   key?: string;
@@ -63,7 +74,7 @@ export interface RestClientOptions {
    **/
   baseUrl?: string;
 
-  apiRegion?: 'default' | 'bytick' | 'NL' | 'HK' | 'TK';
+  apiRegion?: APIRegion;
 
   /** Default: true. whether to try and post-process request exceptions. */
   parse_exceptions?: boolean;
@@ -123,14 +134,22 @@ export function getRestBaseUrl(
   useTestnet: boolean,
   restClientOptions: RestClientOptions,
 ): string {
+  const domainMap: {
+    [Region in APIRegion]: string;
+  } = {
+    default: 'https://api.bybit.com',
+    bytick: 'https://api.bytick.com',
+    NL: 'https://api.bybit.nl',
+    TK: 'https://api.bybit-tr.com',
+    KZ: 'https://api.bybit.kz',
+    HK: 'https://api.byhkbit.com',
+    GE: 'https://api.bybitgeorgia.ge',
+    UAE: 'https://api.bybit.ae',
+    EU: 'https://api.bybit.eu',
+  };
+
   const exchangeBaseUrls = {
-    livenet: {
-      default: 'https://api.bybit.com',
-      bytick: 'https://api.bytick.com',
-      NL: 'https://api.bybit.nl',
-      HK: 'https://api.byhkbit.com',
-      TK: 'https://api.bybit-tr.com',
-    },
+    livenet: domainMap,
     testnet: 'https://api-testnet.bybit.com',
     demoLivenet: 'https://api-demo.bybit.com',
   };
@@ -188,6 +207,7 @@ export function isWsPong(msg: any): boolean {
 }
 
 export const APIID = 'bybitapinode';
+export const APIIDEU = 'Cg000971';
 
 /**
  * Used to switch how authentication/requests work under the hood (primarily for SPOT since it's different there)
@@ -251,4 +271,11 @@ export function parseRateLimitHeaders(
   }
 
   return undefined;
+}
+
+export function isEUAPIRegion(restClientOptions: RestClientOptions): boolean {
+  return (
+    restClientOptions.apiRegion === 'EU' ||
+    restClientOptions.baseUrl?.includes('.eu') === true
+  );
 }

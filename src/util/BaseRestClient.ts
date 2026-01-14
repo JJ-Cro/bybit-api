@@ -6,7 +6,9 @@ import https from 'https';
 
 import {
   APIID,
+  APIIDEU,
   getRestBaseUrl,
+  isEUAPIRegion,
   parseRateLimitHeaders,
   RestClientOptions,
   RestClientType,
@@ -146,7 +148,7 @@ export default abstract class BaseRestClient {
       ...networkOptions,
       headers: {
         ...networkOptions.headers,
-        'x-referer': APIID,
+        'x-referer': isEUAPIRegion(this.options) ? APIIDEU : APIID,
       },
     };
 
