@@ -115,8 +115,9 @@ Professional Node.js, JavaScript & TypeScript SDK for the Bybit REST APIs, WebSo
 
 ## Related Projects
 
-Check out my related JavaScript/TypeScript/Node.js SDKs & projects:
+Check out our JavaScript/TypeScript/Node.js SDKs & Projects:
 
+- Visit our website: [https://Siebly.io](https://siebly.io/?ref=gh)
 - Try our REST API & WebSocket SDKs published on npmjs:
   - [Bybit Node.js SDK: bybit-api](https://www.npmjs.com/package/bybit-api)
   - [Kraken Node.js SDK: @siebly/kraken-api](https://www.npmjs.com/package/@siebly/kraken-api)
