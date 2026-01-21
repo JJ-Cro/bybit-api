@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  AcceptNonLPQuoteParamsV5,
+  AcceptNonLPQuoteResultV5,
   AccountBorrowCollateralLimitV5,
   AccountCoinBalanceV5,
   AccountInfoV5,
@@ -24,6 +26,7 @@ import {
   APIResponseV3,
   APIResponseV3WithTime,
   AssetInfoV5,
+  AutoRepayModeResultV5,
   AvailableAmountToRepayV5,
   BatchAmendOrderParamsV5,
   BatchAmendOrderResultV5,
@@ -109,6 +112,7 @@ import {
   ExecutionV5,
   FeeGroupStructureResponseV5,
   FeeRateV5,
+  FiatTradingPairListV5,
   FundingRateHistoryResponseV5,
   GetAccountCoinBalanceParamsV5,
   GetAccountHistoricOrdersParamsV5,
@@ -119,6 +123,7 @@ import {
   GetAllCoinsBalanceParamsV5,
   GetAllowedDepositCoinInfoParamsV5,
   GetAssetInfoParamsV5,
+  GetAutoRepayModeParamsV5,
   GetAvailableAmountToRepayParamsV5,
   GetBorrowableCoinsParamsV5,
   GetBorrowContractInfoFixedParamsV5,
@@ -148,6 +153,7 @@ import {
   GetExecutionListParamsV5,
   GetFeeGroupStructureParamsV5,
   GetFeeRateParamsV5,
+  GetFiatTradingPairListParamsV5,
   GetFundingRateHistoryParamsV5,
   GetHistoricalVolatilityParamsV5,
   GetIndexPriceComponentsParamsV5,
@@ -162,6 +168,7 @@ import {
   GetMarkPriceKlineParamsV5,
   GetMaxBorrowableAmountParamsV5,
   GetMaxCollateralAmountParamsV5,
+  GetMaxLoanAmountParamsV5,
   GetMovePositionHistoryParamsV5,
   GetOngoingFlexibleLoansParamsV5,
   GetOpenInterestParamsV5,
@@ -197,6 +204,7 @@ import {
   GetRiskLimitParamsV5,
   GetRPIOrderbookParamsV5,
   GetSettlementRecordParamsV5,
+  GetSmallBalanceListParamsV5,
   GetSpreadInstrumentsInfoParamsV5,
   GetSpreadOpenOrdersParamsV5,
   GetSpreadOrderHistoryParamsV5,
@@ -217,6 +225,7 @@ import {
   GetWithdrawalRecordsParamsV5,
   HistoricalVolatilityV5,
   IndexPriceComponentsResponseV5,
+  InstitutionalLoanLTVV5,
   InstrumentInfoResponseV5,
   InsuranceResponseV5,
   InternalDepositRecordV5,
@@ -232,6 +241,7 @@ import {
   ManualRepayWithoutConversionResultV5,
   MarkP2POrderAsPaidParamsV5,
   MaxBorrowableAmountV5,
+  MaxLoanAmountV5,
   MMPModifyParamsV5,
   MMPStateV5,
   MovePositionHistoryV5,
@@ -274,6 +284,8 @@ import {
   RepayFixedV5,
   RepayFlexibleParamsV5,
   RepayFlexibleV5,
+  RepayInstitutionalLoanParamsV5,
+  RepayInstitutionalLoanResultV5,
   RepayLiabilityParamsV5,
   RepayLiabilityResultV5,
   RepaymentHistoryFixedV5,
@@ -289,6 +301,7 @@ import {
   RPIOrderbookResponseV5,
   SendP2POrderMessageParamsV5,
   SetAutoAddMarginParamsV5,
+  SetAutoRepayModeParamsV5,
   SetCollateralCoinParamsV5,
   SetLeverageParamsV5,
   SetLimitPriceActionParamsV5,
@@ -298,6 +311,7 @@ import {
   SettlementRecordV5,
   SetTPSLModeParamsV5,
   SetTradingStopParamsV5,
+  SmallBalanceListV5,
   SpotBorrowCheckResultV5,
   SpotMarginStateV5,
   SpreadInstrumentInfoV5,
@@ -2185,6 +2199,35 @@ export class RestClientV5 extends BaseRestClient {
   }
 
   /**
+   * Get Small Balance Coins
+   * Query small-balance coins with a USDT equivalent of less than 10 USDT.
+   * Ensure total amount for each conversion transaction is between 1.0e-8 and 200 USDT.
+   *
+   * INFO:
+   * - API key permission: Convert
+   * - API rate limit: 10 req/s
+   */
+  getSmallBalanceList(
+    params: GetSmallBalanceListParamsV5,
+  ): Promise<APIResponseV3WithTime<SmallBalanceListV5>> {
+    return this.getPrivate('/v5/asset/covert/small-balance-list', params);
+  }
+
+  /**
+   * Get Fiat Trading Pair List
+   * Query for the list of coins you can convert to/from.
+   *
+   * INFO:
+   * - For buy side (side=0): buy crypto, sell fiat
+   * - For sell side (side=1): sell crypto, buy fiat
+   */
+  getFiatTradingPairList(
+    params?: GetFiatTradingPairListParamsV5,
+  ): Promise<APIResponseV3WithTime<FiatTradingPairListV5>> {
+    return this.getPrivate('/v5/fiat/query-coin-list', params);
+  }
+
+  /**
    *
    ****** User APIs
    *
@@ -2539,6 +2582,38 @@ export class RestClientV5 extends BaseRestClient {
     params: ManualRepayWithoutConversionParamsV5,
   ): Promise<APIResponseV3WithTime<ManualRepayWithoutConversionResultV5>> {
     return this.postPrivate('/v5/account/no-convert-repay', params);
+  }
+
+  /**
+   * Get Auto Repay Mode
+   * Get spot automatic repayment mode.
+   *
+   * INFO:
+   * - If currency is not passed, automatic repay mode for all currencies will be returned
+   */
+  getAutoRepayMode(
+    params?: GetAutoRepayModeParamsV5,
+  ): Promise<APIResponseV3WithTime<AutoRepayModeResultV5>> {
+    return this.getPrivate('/v5/spot-margin-trade/get-auto-repay-mode', params);
+  }
+
+  /**
+   * Set Auto Repay Mode
+   * Set spot automatic repayment mode.
+   *
+   * INFO:
+   * - If currency is not passed, spot automatic repayment will be enabled for all currencies
+   * - If autoRepayMode of a currency is set to 1, the system will automatically make repayments
+   *   without asset conversion to that currency at 0 and 30 minutes every hour
+   * - The amount of repayments is the minimum of available spot balance and liability
+   */
+  setAutoRepayMode(
+    params: SetAutoRepayModeParamsV5,
+  ): Promise<APIResponseV3WithTime<AutoRepayModeResultV5>> {
+    return this.postPrivate(
+      '/v5/spot-margin-trade/set-auto-repay-mode',
+      params,
+    );
   }
 
   /**
@@ -2980,6 +3055,20 @@ export class RestClientV5 extends BaseRestClient {
   }
 
   /**
+   * Obtain Max Loan Amount
+   * Check the maximum borrowable amount & remaining individual platform limit for crypto loans.
+   *
+   * INFO:
+   * - Permission: "Spot trade"
+   * - UID rate limit: 5 req/s
+   */
+  getMaxLoanAmount(
+    params: GetMaxLoanAmountParamsV5,
+  ): Promise<APIResponseV3WithTime<MaxLoanAmountV5>> {
+    return this.postPrivate('/v5/crypto-loan-common/max-loan', params);
+  }
+
+  /**
    * Adjust Collateral Amount New
    * You can increase or reduce your collateral amount. When you reduce, please obey the Get Max. Allowed Collateral Reduction Amount
    */
@@ -3371,7 +3460,7 @@ export class RestClientV5 extends BaseRestClient {
    * @deprecated
    */
   getInstitutionalLendingLTV(): Promise<
-    APIResponseV3WithTime<{ ltvInfo: any[] }>
+    APIResponseV3WithTime<InstitutionalLoanLTVV5>
   > {
     return this.getPrivate('/v5/ins-loan/ltv');
   }
@@ -3380,7 +3469,7 @@ export class RestClientV5 extends BaseRestClient {
    * Get LTV with Ladder Conversion Rate
    */
   getInstitutionalLendingLTVWithLadderConversionRate(): Promise<
-    APIResponseV3WithTime<{ ltvInfo: any[] }>
+    APIResponseV3WithTime<InstitutionalLoanLTVV5>
   > {
     return this.getPrivate('/v5/ins-loan/ltv-convert');
   }
@@ -3401,6 +3490,23 @@ export class RestClientV5 extends BaseRestClient {
     }>
   > {
     return this.postPrivate('/v5/ins-loan/association-uid', params);
+  }
+
+  /**
+   * Repay Institutional Loan
+   * Repay INS loan independently.
+   *
+   * IMPORTANT:
+   * - Only the designated Risk Unit UID is allowed to call this API
+   * - The repayment is processed asynchronously and usually takes 2-3 minutes
+   * - Confirm repayment status via Get Repayment Orders before initiating next repayment
+   * - When repaying, principal amount will be deducted from Unified wallet (interest not included)
+   * - Please contact RM before executing
+   */
+  repayInstitutionalLoan(
+    params: RepayInstitutionalLoanParamsV5,
+  ): Promise<APIResponseV3WithTime<RepayInstitutionalLoanResultV5>> {
+    return this.postPrivate('/v5/ins-loan/repay-loan', params);
   }
 
   /**
@@ -3761,6 +3867,19 @@ export class RestClientV5 extends BaseRestClient {
     }>
   > {
     return this.getPrivate('/v5/rfq/public-trades', params);
+  }
+
+  /**
+   * Accept non-LP Quote
+   * Accept non-LP Quote.
+   *
+   * INFO:
+   * - Up to 50 requests per second
+   */
+  acceptNonLPQuote(
+    params: AcceptNonLPQuoteParamsV5,
+  ): Promise<APIResponseV3WithTime<AcceptNonLPQuoteResultV5>> {
+    return this.postPrivate('/v5/rfq/accept-other-quote', params);
   }
 
   /**

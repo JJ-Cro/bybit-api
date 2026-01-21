@@ -282,3 +282,46 @@ export interface ConvertHistoryRecordV5 {
   convertRate: string;
   createdAt: string;
 }
+
+export interface SmallBalanceCoinV5 {
+  fromCoin: string; // Source currency
+  supportConvert: 1 | 2; // 1: support, 2: not supported
+  availableBalance: string; // Available balance
+  baseValue: string; // USDT equivalent value
+  toAmount: string; // Reserved field
+  exchangeRate: string; // Reserved field
+  feeInfo: null; // Reserved field
+  taxFeeInfo: null; // Reserved field
+}
+
+export interface SmallBalanceListV5 {
+  smallAssetCoins: SmallBalanceCoinV5[]; // Small balance info
+  supportToCoins: string[]; // Supported target coins (e.g., ["MNT","USDT","USDC"])
+}
+
+export interface FiatCoinInfoV5 {
+  coin: string; // Fiat coin code
+  fullName: string; // Fiat full coin name
+  icon: string; // Coin icon url
+  iconNight: string; // Coin icon url (dark mode)
+  precision: number; // Fiat precision
+  disable: boolean; // true: the coin is disabled, false: the coin is allowed
+  singleFromMinLimit: string; // For buy side, minimum amount of fiatCoin per transaction
+  singleFromMaxLimit: string; // For buy side, maximum amount of fiatCoin per transaction
+}
+
+export interface CryptoCoinInfoV5 {
+  coin: string; // Crypto coin code
+  fullName: string; // Crypto full coin name
+  icon: string; // Coin icon url
+  iconNight: string; // Coin icon url (dark mode)
+  precision: number; // Crypto precision
+  disable: boolean; // true: the coin is disabled, false: the coin is allowed
+  singleFromMinLimit: string; // For sell side, minimum amount of cryptoCoin per transaction
+  singleFromMaxLimit: string; // For sell side, maximum amount of cryptoCoin per transaction
+}
+
+export interface FiatTradingPairListV5 {
+  fiats: FiatCoinInfoV5[]; // Fiat coin list
+  cryptos: CryptoCoinInfoV5[]; // Crypto coin list
+}

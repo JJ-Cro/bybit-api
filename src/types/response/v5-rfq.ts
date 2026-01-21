@@ -96,6 +96,7 @@ export interface RFQItemV5 {
     | 'Filled'
     | 'Expired'
     | 'Failed'; // Status
+  acceptOtherQuoteStatus?: string; // Whether to accept non-LP quotes. "false": do not accept, "true": accept
   deskCode: string; // Unique identification code of the inquiry party
   createdAt: number; // Time when the trade is created in epoch
   updatedAt: number; // Time when the trade is updated in epoch
@@ -184,4 +185,8 @@ export interface RFQPublicTradeV5 {
   createdAt: number; // Time when trade is created in epoch
   updatedAt: number; // Time when trade is updated in epoch
   legs: RFQPublicTradeLegV5[]; // Combination transaction
+}
+
+export interface AcceptNonLPQuoteResultV5 {
+  rfqId: string; // Inquiry ID
 }

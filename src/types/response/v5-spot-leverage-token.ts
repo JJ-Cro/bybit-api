@@ -133,3 +133,12 @@ export interface ManualRepayWithoutConversionResultV5 {
    */
   resultStatus: 'P' | 'SU' | 'FA';
 }
+
+export interface AutoRepayModeItemV5 {
+  currency: string; // Coin name, uppercase only
+  autoRepayMode: '0' | '1'; // 0: Off, 1: On
+}
+
+export interface AutoRepayModeResultV5 {
+  data: AutoRepayModeItemV5[];
+}

@@ -107,3 +107,7 @@ export interface GetRFQPublicTradesParamsV5 {
   limit?: number; // Return number of items, max 100, default 50
   cursor?: string; // Page turning mark
 }
+
+export interface AcceptNonLPQuoteParamsV5 {
+  rfqId: string; // Inquiry ID
+}
