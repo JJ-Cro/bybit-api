@@ -241,6 +241,7 @@ export interface WSPositionV5 {
   entryPrice: string;
   markPrice: string;
   leverage: string;
+  breakEvenPrice?: string; // Break even price, only for linear & inverse
   positionBalance: string;
   autoAddMargin: number;
   positionMM: string;
@@ -280,6 +281,7 @@ export interface WSAccountOrderV5 {
   category: CategoryV5;
   orderId: string;
   orderLinkId: string;
+  parentOrderLinkId?: string; // Linked parent order for attached TP/SL orders (futures & options)
   isLeverage: string;
   blockTradeId: string;
   symbol: string;
@@ -543,8 +545,8 @@ export type WSPriceLimitEventV5 = WSPublicTopicEventV5<
 export interface WSADLAlertV5 {
   c: string; // Token of the insurance pool
   s: string; // Trading pair name
-  b: string; // Balance of the insurance fund. Used to determine if ADL is triggered
-  mb: string; // Maximum balance of the insurance pool in the last 8 hours
+  b: string; // Balance of the insurance fund. For shared insurance pool, follows T+1 refresh (updated daily at 00:00 UTC)
+  mb: string; // Deprecated: always returns empty string. Previously: Maximum balance of the insurance pool in the last 8 hours
   i_pr: string; // PnL ratio threshold for triggering contract PnL drawdown ADL
   pr: string; // Symbol's PnL drawdown ratio in the last 8 hours. Used to determine whether ADL is triggered or stopped
   adl_tt: string; // Trigger threshold for contract PnL drawdown ADL

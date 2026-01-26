@@ -20,6 +20,7 @@ export interface OrderResultV5 {
 export interface AccountOrderV5 {
   orderId: string;
   orderLinkId: string;
+  parentOrderLinkId?: string; // Linked parent order for attached TP/SL orders (futures & options)
   blockTradeId: string;
   symbol: string;
   price: string;

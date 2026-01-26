@@ -222,3 +222,20 @@ export interface GetRenewOrderInfoFixedParamsV5 {
   limit?: string;
   cursor?: string;
 }
+
+// Max Loan Amount Request Types
+
+export interface GetMaxLoanAmountParamsV5 {
+  currency: string; // Coin to borrow
+  collateralList?: {
+    ccy: string; // Collateral coin
+    amount: string; // Collateral amount
+  }[];
+}
+
+// Institutional Loan Request Types
+
+export interface RepayInstitutionalLoanParamsV5 {
+  token: string; // Coin name
+  quantity: string; // The qty to be repaid
+}

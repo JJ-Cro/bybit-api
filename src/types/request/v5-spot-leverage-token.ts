@@ -58,3 +58,12 @@ export interface ManualRepayWithoutConversionParamsV5 {
   coin: string;
   amount?: string;
 }
+
+export interface GetAutoRepayModeParamsV5 {
+  currency?: string; // Coin name, uppercase only. If not passed, returns all currencies
+}
+
+export interface SetAutoRepayModeParamsV5 {
+  currency?: string; // Coin name, uppercase only. If not passed, enables for all currencies
+  autoRepayMode: '0' | '1'; // 0: Off, 1: On
+}

@@ -24,6 +24,7 @@ export interface PositionV5 {
   autoAddMargin?: number;
   positionStatus: PositionStatusV5;
   leverage?: string;
+  breakEvenPrice?: string; // Break even price, only for linear & inverse
   markPrice: string;
   liqPrice: string | '';
   bustPrice?: string;

@@ -90,6 +90,7 @@ export interface GetExecutionListParamsV5 {
   orderId?: string;
   orderLinkId?: string;
   baseCoin?: string;
+  settleCoin?: string; // Settle coin, uppercase only. For linear, inverse, option
   startTime?: number;
   endTime?: number;
   execType?: ExecTypeV5;

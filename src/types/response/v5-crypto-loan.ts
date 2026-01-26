@@ -326,3 +326,48 @@ export interface RenewOrderInfoFixedV5 {
   renewLoanNo: string;
   time: string;
 }
+
+// Institutional Loan Types
+
+export interface UnpaidInfoV5 {
+  token: string; // Coin
+  unpaidQty: string; // Unpaid principle
+  unpaidInterest: string; // Unpaid interest
+}
+
+export interface BalanceInfoV5 {
+  token: string; // Margin coin
+  price: string; // Margin coin price
+  qty: string; // Margin coin quantity
+  convertedAmount: string; // Margin conversion amount
+}
+
+export interface LTVInfoV5 {
+  ltv: string; // Risk rate (when liqStatus != 0, returns empty string)
+  rst: string; // Remaining liquidation time in UTC seconds (when liqStatus != 0, returns empty string)
+  parentUid: string; // The designated Risk Unit ID
+  subAccountUids: string[]; // Bound user IDs
+  unpaidAmount: string; // Total debt in USDT (when liqStatus != 0, returns empty string)
+  unpaidInfo: UnpaidInfoV5[]; // Debt details (when liqStatus != 0, returns empty array)
+  balance: string; // Total asset in USDT (when liqStatus != 0, returns empty string)
+  balanceInfo: BalanceInfoV5[]; // Asset details (when liqStatus != 0, returns empty array)
+  liqStatus?: number; // Liquidation status: 0=Normal, 1=Under liquidation, 2=Manual repayment in progress, 3=Transfer in progress
+}
+
+export interface InstitutionalLoanLTVV5 {
+  ltvInfo: LTVInfoV5[]; // LTV info array
+  liqStatus?: number; // Liquidation status: 0=Normal, 1=Under liquidation, 2=Manual repayment in progress, 3=Transfer in progress
+}
+
+export interface RepayInstitutionalLoanResultV5 {
+  repayOrderStatus: string; // P: processing
+}
+
+// Max Loan Amount Response Types
+
+export interface MaxLoanAmountV5 {
+  currency: string; // Coin to borrow
+  maxLoan: string; // Maximum borrowable amount based on current collateral
+  notionalUsd: string; // Notional USD value
+  remainingQuota: string; // Remaining individual platform borrowing limit (shared between main and sub accounts)
+}

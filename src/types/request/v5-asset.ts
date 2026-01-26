@@ -191,3 +191,12 @@ export interface GetConvertHistoryParamsV5 {
   index?: number;
   limit?: number;
 }
+
+export interface GetSmallBalanceListParamsV5 {
+  accountType: 'eb_convert_uta'; // Wallet type, only supports Unified wallet
+  fromCoin?: string; // Source currency
+}
+
+export interface GetFiatTradingPairListParamsV5 {
+  side?: 0 | 1; // 0: buy (buy crypto, sell fiat), 1: sell (sell crypto, buy fiat)
+}
