@@ -1,7 +1,7 @@
-// @ts-ignore
+// @ts-expect-error-pr
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
-import { RestClientV5 } from '../src/index';
+import { RestClientV5 } from '../../src/index';
 
 // or
 // import { RestClientV5 } from 'bybit-api';

@@ -1,4 +1,4 @@
-import { DefaultLogger, WebsocketAPIClient } from '../src';
+import { DefaultLogger, WebsocketAPIClient } from '../../../src';
 
 // or
 // import { DefaultLogger, WebsocketAPIClient } from 'bybit-api';
