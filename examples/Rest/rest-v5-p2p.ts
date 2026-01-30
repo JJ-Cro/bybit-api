@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { RestClientV5 } from '../src';
+import { RestClientV5 } from '../../src';
 
 // ENDPOINT: /v5/p2p/oss/upload_file
 // METHOD: POST
