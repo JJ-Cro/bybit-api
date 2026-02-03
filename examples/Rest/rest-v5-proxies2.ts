@@ -1,4 +1,3 @@
-// @ts-expect-error-pr
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
 import { RestClientV5 } from '../../src/index';
