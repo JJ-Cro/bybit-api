@@ -11,7 +11,7 @@ import {
 //   isWsAllLiquidationEvent,
 // } from 'bybit-api';
 
-function onAllLiquidationEvent(event) {
+function onAllLiquidationEvent(event: unknown) {
   console.log(
     new Date(),
     'allLiquidationEvent',

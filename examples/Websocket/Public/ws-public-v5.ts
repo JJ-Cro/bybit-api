@@ -5,7 +5,7 @@ import { DefaultLogger, WebsocketClient, WS_KEY_MAP } from '../../../src';
 
 const logger = {
   ...DefaultLogger,
-  trace: (...params) => console.log('trace', ...params),
+  trace: (...params: any[]) => console.log('trace', ...params),
 };
 
 /**
