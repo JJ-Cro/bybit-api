@@ -19,6 +19,9 @@
 
 [1]: https://www.npmjs.com/package/bybit-api
 
+> [!TIP]
+> Upcoming change: As part of the [Siebly.io](https://siebly.io/?ref=ghbybit) brand, this SDK will soon be hosted under the [Siebly.io GitHub organisation](https://github.com/sieblyio). The migration is seamless and requires no user changes.
+
 Professional Node.js, JavaScript & TypeScript SDK for the Bybit REST APIs, WebSocket APIs & WebSocket Events:
 
 - Complete integration with all Bybit REST APIs & WebSockets, including the WebSocket API.
