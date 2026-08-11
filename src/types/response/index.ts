@@ -25,6 +25,7 @@ export * from './v5-preupgrade';
 export * from './v5-rfq';
 export * from './v5-rwa';
 export * from './v5-spot-leverage-token';
+export * from './v5-spot-x';
 export * from './v5-spreadtrading';
 export * from './v5-strategy';
 export * from './v5-trade';

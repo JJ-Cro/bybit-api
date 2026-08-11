@@ -169,3 +169,8 @@ export interface GetLongShortRatioParamsV5 {
   limit?: number;
   cursor?: string;
 }
+
+export interface GetFullDepthOrderbookParamsV5 {
+  category: 'spot' | 'linear' | 'inverse';
+  symbol: string;
+}

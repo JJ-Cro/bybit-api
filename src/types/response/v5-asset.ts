@@ -120,6 +120,7 @@ export interface DepositRecordV5 {
   batchReleaseLimit: string;
   depositType: string;
   fromAddress: string;
+  travelRuleStatus?: string;
 }
 
 export interface SubmitDepositOriginatorInfoResultV5 {
@@ -135,6 +136,7 @@ export interface InternalDepositRecordV5 {
   address: string;
   createdTime: string;
   txID: string;
+  complianceStatus?: string;
 }
 
 export interface DepositAddressChainV5 {

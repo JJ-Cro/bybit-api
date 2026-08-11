@@ -117,6 +117,7 @@ export interface UserSettingConfigV5 {
   fmsef?: boolean;
   /** Delta Neutral mode; may be absent on older API responses. */
   deltaEnable?: boolean;
+  smpType?: '0' | '1' | '2' | '3' | string;
 }
 
 export interface TransactionLogV5 {
@@ -141,6 +142,7 @@ export interface TransactionLogV5 {
   orderLinkId: string;
   extraFees: string;
   transSubType: string;
+  displayType?: string;
 }
 
 export interface MMPStateV5 {

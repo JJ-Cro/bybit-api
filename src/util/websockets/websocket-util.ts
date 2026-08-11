@@ -279,11 +279,18 @@ export function getWsUrl(
   const isDemoTrading = wsClientOptions.demoTrading;
   const isTestnet = wsClientOptions.testnet;
   const networkKey = isTestnet ? 'testnet' : 'livenet';
+  const isJP = wsClientOptions.restOptions?.apiRegion === 'JP';
 
   switch (wsKey) {
     case WS_KEY_MAP.v5Private: {
       if (isDemoTrading) {
         return DEMO_TRADING_ENDPOINT;
+      }
+      if (isJP) {
+        const base = isTestnet
+          ? 'stream-testnet.manepa.jp'
+          : 'stream.manepa.jp';
+        return `wss://${base}/v5/private`;
       }
       return WS_BASE_URL_MAP.v5.private[networkKey];
     }
@@ -291,18 +298,36 @@ export function getWsUrl(
       if (isDemoTrading) {
         return DEMO_TRADING_ENDPOINT;
       }
+      if (isJP) {
+        const base = isTestnet
+          ? 'stream-testnet.manepa.jp'
+          : 'stream.manepa.jp';
+        return `wss://${base}/v5/trade`;
+      }
       return WS_BASE_URL_MAP[wsKey].private[networkKey];
     }
     case WS_KEY_MAP.v5SpotPublic: {
+      if (isJP) {
+        return 'wss://stream.manepa.jp/v5/public/spot';
+      }
       return WS_BASE_URL_MAP.v5SpotPublic.public[networkKey];
     }
     case WS_KEY_MAP.v5LinearPublic: {
+      if (isJP) {
+        return 'wss://stream.manepa.jp/v5/public/linear';
+      }
       return WS_BASE_URL_MAP.v5LinearPublic.public[networkKey];
     }
     case WS_KEY_MAP.v5InversePublic: {
+      if (isJP) {
+        return 'wss://stream.manepa.jp/v5/public/inverse';
+      }
       return WS_BASE_URL_MAP.v5InversePublic.public[networkKey];
     }
     case WS_KEY_MAP.v5OptionPublic: {
+      if (isJP) {
+        return 'wss://stream.manepa.jp/v5/public/option';
+      }
       return WS_BASE_URL_MAP.v5OptionPublic.public[networkKey];
     }
     default: {

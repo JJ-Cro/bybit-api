@@ -133,10 +133,21 @@ export interface CreateBorrowOrderFixedParamsV5 {
   term: string;
   autoRepay?: string; // Deprecated
   repayType?: string; // 1: Auto Repayment (default); 2: Transfer to flexible loan
+  strategyType?: 'PARTIAL' | 'FULL';
   collateralList?: {
     currency: string;
     amount: string;
   }[];
+}
+
+export interface GetFixedLoanAvailableInventoryParamsV5 {
+  currency: string;
+  term: string;
+  annualRate: string;
+}
+
+export interface GetFlexibleLoanAvailableInventoryParamsV5 {
+  currency: string;
 }
 
 export interface CreateSupplyOrderFixedParamsV5 {

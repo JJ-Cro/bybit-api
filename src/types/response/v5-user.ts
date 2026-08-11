@@ -193,3 +193,13 @@ export interface FriendReferralRecordV5 {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ReferralCodeItemV5 {
+  referralCode: string;
+  referralLink: string;
+  scene: number;
+}
+
+export interface ReferralCodesResultV5 {
+  referralCodes: ReferralCodeItemV5[];
+}

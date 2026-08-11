@@ -120,3 +120,13 @@ export interface RenewFixedRateBorrowParamsV5 {
   loanId: string;
   qty?: string;
 }
+
+export interface GetFlexibleAvailableInventoryParamsV5 {
+  currency: string;
+}
+
+export interface GetFixedRateAvailableInventoryParamsV5 {
+  currency: string;
+  term: string;
+  annualRate: string;
+}

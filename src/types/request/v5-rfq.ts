@@ -6,12 +6,21 @@ export interface RFQTransactionV5 {
   isLeverage?: boolean; // For spot lending, default false
 }
 
+export interface RFQHedgeLegV5 {
+  category: string;
+  symbol: string;
+  side: string;
+  qty: string;
+  price?: string;
+}
+
 export interface CreateRFQParamsV5 {
   counterparties: string[]; // Array of deskCode
   rfqLinkId?: string; // Custom ID for inquiry form, 1-32 characters
   anonymous?: boolean; // Whether it is anonymous inquiry, default false
   strategyType?: string; // Inquiry label, max 36 characters
   list: RFQTransactionV5[]; // Transaction list, up to 10 sets
+  hedge?: RFQHedgeLegV5[];
 }
 
 export interface CancelRFQParamsV5 {
@@ -39,6 +48,24 @@ export interface ExecuteRFQQuoteParamsV5 {
   rfqId: string; // Inquiry ID
   quoteId: string; // Quotation ID
   quoteSide: 'buy' | 'sell'; // The direction of the quote
+  isHedge?: boolean;
+}
+
+export interface GetRFQDetailsParamsV5 {
+  rfqId?: string;
+  rfqLinkId?: string;
+  status?:
+    | 'Active'
+    | 'PendingFill'
+    | 'Canceled'
+    | 'Filled'
+    | 'Expired'
+    | 'Failed';
+  traderType?: 'quote' | 'request';
+  startTime?: number;
+  endTime?: number;
+  limit?: number;
+  cursor?: string;
 }
 
 export interface CancelRFQQuoteParamsV5 {

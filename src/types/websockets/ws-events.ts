@@ -326,7 +326,7 @@ export interface WSAccountOrderV5 {
   closeOnTrigger: boolean;
   placeType: string;
   smpType: OrderSMPTypeV5;
-  smpGroup: number;
+  smpGroup: string;
   smpOrderId: string;
   createdTime: string;
   updatedTime: string;

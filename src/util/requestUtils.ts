@@ -11,7 +11,8 @@ export type APIRegion =
   | 'HK'
   | 'GE'
   | 'UAE'
-  | 'EU';
+  | 'EU'
+  | 'JP';
 
 export interface RestClientOptions {
   /** Your API key */
@@ -75,6 +76,9 @@ export interface RestClientOptions {
   baseUrl?: string;
 
   apiRegion?: APIRegion;
+
+  /** Site ID header for regional access (e.g. 'ARG_BTL' for Argentina) */
+  siteId?: string;
 
   /** Default: true. whether to try and post-process request exceptions. */
   parse_exceptions?: boolean;
@@ -146,6 +150,7 @@ export function getRestBaseUrl(
     GE: 'https://api.bybitgeorgia.ge',
     UAE: 'https://api.bybit.ae',
     EU: 'https://api.bybit.eu',
+    JP: 'https://api.manepa.jp',
   };
 
   const exchangeBaseUrls = {
@@ -163,6 +168,9 @@ export function getRestBaseUrl(
   }
 
   if (useTestnet) {
+    if (restClientOptions.apiRegion === 'JP') {
+      return 'https://api-testnet.manepa.jp';
+    }
     return exchangeBaseUrls.testnet;
   }
 

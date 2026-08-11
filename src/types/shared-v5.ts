@@ -327,7 +327,8 @@ export type TransactionTypeV5 =
   | 'INSTITUTION_LOAN_RESERVE_IN'
   | 'INSTITUTION_LOAN_RESERVE_OUT'
   | 'PLATFORM_TOKEN_MNT_LIQRECALLEDMMNT'
-  | 'PLATFORM_TOKEN_MNT_LIQRETURNEDMNT';
+  | 'PLATFORM_TOKEN_MNT_LIQRETURNEDMNT'
+  | 'DIVIDEND_SETTLEMENT';
 
 export type PermissionTypeV5 =
   | 'ContractTrade'
@@ -367,6 +368,7 @@ export type ExecTypeV5 =
   | 'Settle'
   | 'BlockTrade'
   | 'MovePosition'
+  | 'CorporateAction'
   | 'UNKNOWN';
 
 /**

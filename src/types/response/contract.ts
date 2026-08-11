@@ -45,7 +45,7 @@ export interface ContractHistoricOrder {
   closeOnTrigger: boolean;
   blockTradeId: string;
   smpType: string;
-  smpGroup: number;
+  smpGroup: string;
   smpOrderId: string;
 }
 
