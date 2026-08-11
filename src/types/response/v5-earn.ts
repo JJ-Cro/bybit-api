@@ -226,6 +226,8 @@ export interface HoldToEarnAirdropProductYieldV5 {
   coinName: string;
   /** Yesterday's APR for display, e.g. "10%", "0%" */
   apy: string;
+  personalApy?: string;
+  multiplier?: string;
 }
 
 export interface HoldToEarnAirdropProductV5 {
@@ -235,6 +237,7 @@ export interface HoldToEarnAirdropProductV5 {
   announcementUrl: string;
   /** Yesterday's avg APR across yield coins */
   apy: string;
+  personalApy?: string;
 }
 
 export interface HoldToEarnAirdropProductsResultV5 {

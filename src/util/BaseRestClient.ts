@@ -149,6 +149,9 @@ export default abstract class BaseRestClient {
       headers: {
         ...networkOptions.headers,
         'x-referer': isEUAPIRegion(this.options) ? APIIDEU : APIID,
+        ...(this.options.siteId
+          ? { 'x-site-id': this.options.siteId }
+          : undefined),
       },
     };
 

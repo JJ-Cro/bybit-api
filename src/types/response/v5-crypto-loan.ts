@@ -281,6 +281,21 @@ export interface BorrowOrderInfoFixedV5 {
   state: number;
   term: number;
   repayType: string; // 1: Auto Repayment; 2: Transfer to flexible loan; 0: No Automatic Repayment
+  strategyType?: 'PARTIAL' | 'FULL' | string;
+}
+
+export interface FixedLoanAvailableInventoryV5 {
+  currency: string;
+  term: string;
+  annualRate: string;
+  availableInventory: string;
+  updateTime: string;
+}
+
+export interface FlexibleLoanAvailableInventoryV5 {
+  currency: string;
+  availableInventory: string;
+  updateTime: string;
 }
 
 export interface SupplyOrderInfoFixedV5 {
@@ -374,6 +389,7 @@ export interface InstitutionalLendingCoinDeltaItemV5 {
 export interface InstitutionalLendingCoinDeltaAmountV5 {
   riskUnitDeltaAmount: string;
   riskUnitDeltaAvailableAmount: string;
+  riskUnitDelta?: string;
   list: InstitutionalLendingCoinDeltaItemV5[];
 }
 

@@ -66,7 +66,7 @@ export interface AccountOrderV5 {
   closeOnTrigger: boolean;
   placeType: 'iv' | 'price' | '';
   smpType: string;
-  smpGroup: number;
+  smpGroup: string;
   smpOrderId: string;
   createdTime: string;
   updatedTime: string;

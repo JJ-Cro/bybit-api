@@ -83,6 +83,14 @@ export interface RFQLegV5 {
   isLeverage?: boolean; // For spot lending
 }
 
+export interface RFQHedgeLegItemV5 {
+  category: string;
+  symbol: string;
+  side: string;
+  qty: string;
+  price?: string;
+}
+
 export interface RFQItemV5 {
   rfqId: string; // Inquiry ID
   rfqLinkId: string; // Custom ID for inquiry form
@@ -98,9 +106,11 @@ export interface RFQItemV5 {
     | 'Failed'; // Status
   acceptOtherQuoteStatus?: string; // Whether to accept non-LP quotes. "false": do not accept, "true": accept
   deskCode: string; // Unique identification code of the inquiry party
+  anonymous?: boolean;
   createdAt: number; // Time when the trade is created in epoch
   updatedAt: number; // Time when the trade is updated in epoch
   legs: RFQLegV5[]; // Combination transaction
+  hedge?: RFQHedgeLegItemV5[];
 }
 
 export interface GetRFQRealtimeResultV5 {
@@ -118,6 +128,7 @@ export interface QuoteLegV5 {
   price: string; // Order price or quote price
   qty?: string; // Order quantity
   isLeverage?: boolean; // For spot lending
+  isHedge?: boolean;
 }
 
 export interface RFQQuoteItemV5 {
@@ -127,6 +138,7 @@ export interface RFQQuoteItemV5 {
   quoteLinkId: string; // Quotation custom ID
   expiresAt: string; // Expiration time in milliseconds Unix timestamp
   deskCode: string; // Unique identification code of quotation party
+  anonymous?: boolean;
   status:
     | 'Active'
     | 'Canceled'
@@ -189,4 +201,60 @@ export interface RFQPublicTradeV5 {
 
 export interface AcceptNonLPQuoteResultV5 {
   rfqId: string; // Inquiry ID
+}
+
+export interface RFQDetailQuoteLegV5 {
+  category: string;
+  symbol: string;
+  price: string;
+  qty: string;
+  isHedge?: boolean;
+}
+
+export interface RFQDetailQuoteV5 {
+  quoteId: string;
+  deskCode: string;
+  anonymous?: boolean;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  expiresAt: string;
+  quoteBuyList?: RFQDetailQuoteLegV5[];
+  quoteSellList?: RFQDetailQuoteLegV5[];
+}
+
+export interface RFQDetailTradeLegV5 {
+  category: string;
+  orderId: string;
+  symbol: string;
+  side: string;
+  price: string;
+  qty: string;
+  markPrice: string;
+  execFee: string;
+  extraFees: string;
+  execId: string;
+  resultCode: number;
+  resultMessage: string;
+  rejectParty: string;
+}
+
+export interface RFQDetailItemV5 {
+  rfqId: string;
+  rfqLinkId: string;
+  counterparties: string[];
+  expiresAt: string;
+  strategyType: string;
+  status: string;
+  acceptOtherQuoteStatus?: boolean;
+  execQuoteId?: string;
+  execQuoteSide?: string;
+  deskCode: string;
+  anonymous?: boolean;
+  createdAt: string;
+  updatedAt: string;
+  legs: RFQLegV5[];
+  hedge?: RFQHedgeLegItemV5[];
+  quoteList?: RFQDetailQuoteV5[];
+  tradeLegs?: RFQDetailTradeLegV5[];
 }

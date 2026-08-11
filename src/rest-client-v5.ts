@@ -187,6 +187,8 @@ import {
   FeeGroupStructureResponseV5,
   FeeRateV5,
   FiatTradingPairListV5,
+  FixedLoanAvailableInventoryV5,
+  FixedRateAvailableInventoryV5,
   FixedRateBorrowContractInfoV5,
   FixedRateBorrowOrderInfoV5,
   FixedRateBorrowParamsV5,
@@ -196,6 +198,8 @@ import {
   FixedTermEarnPlaceOrderResultV5,
   FixedTermEarnPositionListV5,
   FixedTermEarnProductListV5,
+  FlexibleAvailableInventoryV5,
+  FlexibleLoanAvailableInventoryV5,
   FriendReferralRecordV5,
   FundingAccountTransactionRecordV5,
   FundingRateHistoryResponseV5,
@@ -282,13 +286,18 @@ import {
   GetFeeGroupStructureParamsV5,
   GetFeeRateParamsV5,
   GetFiatTradingPairListParamsV5,
+  GetFixedLoanAvailableInventoryParamsV5,
+  GetFixedRateAvailableInventoryParamsV5,
   GetFixedRateBorrowContractInfoParamsV5,
   GetFixedRateBorrowOrderInfoParamsV5,
   GetFixedRateBorrowOrderQuoteParamsV5,
   GetFixedTermEarnOrderListParamsV5,
   GetFixedTermEarnPositionParamsV5,
   GetFixedTermEarnProductParamsV5,
+  GetFlexibleAvailableInventoryParamsV5,
+  GetFlexibleLoanAvailableInventoryParamsV5,
   GetFriendReferralsParamsV5,
+  GetFullDepthOrderbookParamsV5,
   GetFundingAccountTransactionHistoryParamsV5,
   GetFundingRateHistoryParamsV5,
   GetFuturesLeverageParamsV5,
@@ -301,6 +310,9 @@ import {
   GetInternalDepositRecordParamsV5,
   GetInternalTransferParamsV5,
   GetKlineParamsV5,
+  GetLaunchpoolProjectListParamsV5,
+  GetLaunchpoolUserActivityLogParamsV5,
+  GetLaunchpoolUserHistoryParamsV5,
   GetLiquidityMiningProductParamsV5,
   GetLoanLTVAdjustmentHistoryParamsV5,
   GetLongShortRatioParamsV5,
@@ -331,6 +343,7 @@ import {
   GetPreUpgradeTransactionLogParamsV5,
   GetPreUpgradeUSDCSessionParamsV5,
   GetPublicTradingHistoryParamsV5,
+  GetPuzzleProjectListParamsV5,
   GetPwmAllFundOrdersParamsV5,
   GetPwmAllFundsParamsV5,
   GetPwmAssetManagerInvestmentPlansParamsV5,
@@ -344,6 +357,7 @@ import {
   GetRepaymentHistoryFixedParamsV5,
   GetRepaymentHistoryFlexibleParamsV5,
   GetRepaymentHistoryParamsV5,
+  GetRFQDetailsParamsV5,
   GetRFQHistoryParamsV5,
   GetRFQListParamsV5,
   GetRFQPublicTradesParamsV5,
@@ -374,6 +388,8 @@ import {
   GetSupplyOrderQuoteFixedParamsV5,
   GetSystemStatusParamsV5,
   GetTickersParamsV5,
+  GetTokenSplashProjectListParamsV5,
+  GetTokenSplashUserActivityParamsV5,
   GetTotalMembersAssetsParamsV5,
   GetTradeInfoForAnalysisParamsV5,
   GetTransactionLogParamsV5,
@@ -397,6 +413,10 @@ import {
   InvestMorePwmInvestmentPlanParamsV5,
   InvestMorePwmInvestmentPlanResultV5,
   IssueVoucherParamsV5,
+  LaunchpoolActivityLogResultV5,
+  LaunchpoolCurrentStakingResultV5,
+  LaunchpoolProjectListResultV5,
+  LaunchpoolUserHistoryResultV5,
   LiquidityMiningProductResultV5,
   LoanLTVAdjustmentHistoryV5,
   LongShortRatioV5,
@@ -454,6 +474,7 @@ import {
   PreUpgradeTransaction,
   PreUpgradeUSDCSessionSettlement,
   PublicTradeV5,
+  PuzzleProjectListResultV5,
   PwmAllFundOrdersResultV5,
   PwmAllFundsResultV5,
   PwmAssetManagerInvestmentPlansResultV5,
@@ -475,6 +496,7 @@ import {
   RedeemFixedTermEarnResultV5,
   RedeemPwmInvestmentPlanParamsV5,
   RedeemPwmInvestmentPlanResultV5,
+  ReferralCodesResultV5,
   RenewBorrowOrderFixedParamsV5,
   RenewBorrowOrderFixedV5,
   RenewFixedRateBorrowParamsV5,
@@ -494,6 +516,7 @@ import {
   RepaymentHistoryV5,
   RequestConvertQuoteParamsV5,
   RFQConfigV5,
+  RFQDetailItemV5,
   RFQHistory,
   RFQPublicTradeV5,
   RFQQuoteItemV5,
@@ -557,6 +580,8 @@ import {
   TickerLinearInverseV5,
   TickerOptionV5,
   TickerSpotV5,
+  TokenSplashProjectListResultV5,
+  TokenSplashUserActivityResultV5,
   TotalMembersAssetsResultV5,
   TPSLModeV5,
   TradeInfoForAnalysisResultV5,
@@ -958,6 +983,12 @@ export class RestClientV5 extends BaseRestClient {
     params: GetOrderbookParamsV5,
   ): Promise<APIResponseV3WithTime<OrderbookResponseV5>> {
     return this.get('/v5/market/orderbook', params);
+  }
+
+  getFullDepthOrderbook(
+    params: GetFullDepthOrderbookParamsV5,
+  ): Promise<APIResponseV3WithTime<OrderbookResponseV5>> {
+    return this.get('/v5/market/full_orderbook', params);
   }
 
   /**
@@ -1968,7 +1999,7 @@ export class RestClientV5 extends BaseRestClient {
    */
   getSMPGroup(): Promise<
     APIResponseV3WithTime<{
-      smpGroup: number;
+      smpGroup: string;
     }>
   > {
     return this.getPrivate('/v5/account/smp-group');
@@ -2893,6 +2924,10 @@ export class RestClientV5 extends BaseRestClient {
     return this.getPrivate('/v5/user/invitation/referrals', params);
   }
 
+  getReferralCode(): Promise<APIResponseV3WithTime<ReferralCodesResultV5>> {
+    return this.getPrivate('/v5/user/invitation/code');
+  }
+
   /**
    * Sign Agreement
    * To trade commodity contracts (e.g. metals XAU/XAG perps, crude oil perps), complete the agreement signing first.
@@ -3555,6 +3590,24 @@ export class RestClientV5 extends BaseRestClient {
     return this.postPrivate('/v5/spot-margin-trade/fixedborrow-renew', params);
   }
 
+  getFlexibleAvailableInventory(
+    params: GetFlexibleAvailableInventoryParamsV5,
+  ): Promise<APIResponseV3WithTime<FlexibleAvailableInventoryV5>> {
+    return this.getPrivate(
+      '/v5/spot-margin-trade/flexible-available-inventory',
+      params,
+    );
+  }
+
+  getFixedRateAvailableInventory(
+    params: GetFixedRateAvailableInventoryParamsV5,
+  ): Promise<APIResponseV3WithTime<FixedRateAvailableInventoryV5>> {
+    return this.getPrivate(
+      '/v5/spot-margin-trade/fixed-available-inventory',
+      params,
+    );
+  }
+
   /**
    *
    ****** Spot Margin Trade APIs (Normal)
@@ -4128,6 +4181,15 @@ export class RestClientV5 extends BaseRestClient {
     );
   }
 
+  getFlexibleLoanAvailableInventory(
+    params: GetFlexibleLoanAvailableInventoryParamsV5,
+  ): Promise<APIResponseV3WithTime<FlexibleLoanAvailableInventoryV5>> {
+    return this.getPrivate(
+      '/v5/crypto-loan-flexible/available-inventory',
+      params,
+    );
+  }
+
   /**
    *
    ****** Fixed Loan
@@ -4339,6 +4401,12 @@ export class RestClientV5 extends BaseRestClient {
     }>
   > {
     return this.getPrivate('/v5/crypto-loan-fixed/renew-info', params);
+  }
+
+  getFixedLoanAvailableInventory(
+    params: GetFixedLoanAvailableInventoryParamsV5,
+  ): Promise<APIResponseV3WithTime<FixedLoanAvailableInventoryV5>> {
+    return this.getPrivate('/v5/crypto-loan-fixed/available-inventory', params);
   }
 
   /**
@@ -5497,6 +5565,15 @@ export class RestClientV5 extends BaseRestClient {
     return this.postPrivate('/v5/rfq/accept-other-quote', params);
   }
 
+  getRFQDetails(params?: GetRFQDetailsParamsV5): Promise<
+    APIResponseV3WithTime<{
+      cursor: string;
+      list: RFQDetailItemV5[];
+    }>
+  > {
+    return this.getPrivate('/v5/rfq/rfq-detail-list', params);
+  }
+
   /**
    *
    ****** P2P TRADING
@@ -5808,5 +5885,56 @@ export class RestClientV5 extends BaseRestClient {
     }>
   > {
     return this.getPrivate('/v5/apilimit/query-all', params);
+  }
+
+  /**
+   *
+   ****** Spot-X (Launchpool / Puzzle / Token Splash)
+   *
+   */
+
+  getLaunchpoolProjectList(
+    params: GetLaunchpoolProjectListParamsV5,
+  ): Promise<APIResponseV3WithTime<LaunchpoolProjectListResultV5>> {
+    return this.get('/v5/spot-x/launchpool/project/list', params);
+  }
+
+  getLaunchpoolUserActivityLog(
+    params?: GetLaunchpoolUserActivityLogParamsV5,
+  ): Promise<APIResponseV3WithTime<LaunchpoolActivityLogResultV5>> {
+    return this.postPrivate('/v5/spot-x/launchpool/user/activity-log', params);
+  }
+
+  getLaunchpoolCurrentStaking(): Promise<
+    APIResponseV3WithTime<LaunchpoolCurrentStakingResultV5>
+  > {
+    return this.getPrivate('/v5/spot-x/launchpool/user/current-staking');
+  }
+
+  getLaunchpoolUserHistory(
+    params?: GetLaunchpoolUserHistoryParamsV5,
+  ): Promise<APIResponseV3WithTime<LaunchpoolUserHistoryResultV5>> {
+    return this.postPrivate('/v5/spot-x/launchpool/user/history', params);
+  }
+
+  getPuzzleProjectList(
+    params: GetPuzzleProjectListParamsV5,
+  ): Promise<APIResponseV3WithTime<PuzzleProjectListResultV5>> {
+    return this.get('/v5/spot-x/puzzle/project/list', params);
+  }
+
+  getTokenSplashProjectList(
+    params: GetTokenSplashProjectListParamsV5,
+  ): Promise<APIResponseV3WithTime<TokenSplashProjectListResultV5>> {
+    return this.get('/v5/spot-x/token-splash/project/list', params);
+  }
+
+  getTokenSplashUserActivityParams(
+    params?: GetTokenSplashUserActivityParamsV5,
+  ): Promise<APIResponseV3WithTime<TokenSplashUserActivityResultV5>> {
+    return this.getPrivate(
+      '/v5/spot-x/token-splash/user/activity-params',
+      params,
+    );
   }
 }

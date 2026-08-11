@@ -204,3 +204,17 @@ export interface FixedRateBorrowQuoteV5 {
   annualRate: string;
   qty: string;
 }
+
+export interface FlexibleAvailableInventoryV5 {
+  currency: string;
+  availableInventory: string;
+  updateTime: string;
+}
+
+export interface FixedRateAvailableInventoryV5 {
+  currency: string;
+  term: string;
+  annualRate: string;
+  availableInventory: string;
+  updateTime: string;
+}
