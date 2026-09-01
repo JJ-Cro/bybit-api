@@ -211,7 +211,7 @@ siebly:
         href: /ai/exchange-state/bybit
       - heading: Source repository
         summary: Browse SDK source, releases, issues, and endpoint coverage from GitHub.
-        href: https://github.com/tiagosiebler/bybit-api
+        href: https://github.com/sieblyio/bybit-api
 -->
 # Bybit API JavaScript Tutorial for Node.js and TypeScript
 
@@ -227,7 +227,7 @@ The SDK handles the repetitive parts: HMAC and RSA request signing, Bybit API en
 **Key links**
 
 - Bybit JavaScript SDK by Siebly: [`bybit-api`](https://www.npmjs.com/package/bybit-api)
-- GitHub Repository: [`tiagosiebler/bybit-api`](https://github.com/tiagosiebler/bybit-api)
+- GitHub Repository: [`sieblyio/bybit-api`](https://github.com/sieblyio/bybit-api)
 - SDK function-endpoint map: [Bybit JavaScript Endpoint Reference](./endpointFunctionList.md)
 - REST API examples: [Bybit SDK REST API examples](../examples/Rest/rest-v5-public.ts)
 - WebSocket examples: [Bybit SDK WebSocket examples](../examples/Websocket/Public/ws-public-v5.ts)
@@ -266,7 +266,7 @@ The method names stay close to Bybit's endpoint names, while the SDK handles bas
 <!-- siebly:section id="install-and-api-keys" -->
 ## Install and API keys
 
-If you do not have Node.js installed yet, install it first. The SDK is published to both [GitHub](https://github.com/tiagosiebler/bybit-api) and [npm](https://www.npmjs.com/package/bybit-api).
+If you do not have Node.js installed yet, install it first. The SDK is published to both [GitHub](https://github.com/sieblyio/bybit-api) and [npm](https://www.npmjs.com/package/bybit-api).
 
 Install the SDK with npm:
 
@@ -1699,7 +1699,7 @@ No. This guide covers the common first steps and production concerns. For full m
 
 - [Bybit JavaScript endpoint reference](./endpointFunctionList.md)
 - [Bybit SDK examples](../examples)
-- [Bybit SDK source on GitHub](https://github.com/tiagosiebler/bybit-api)
+- [Bybit SDK source on GitHub](https://github.com/sieblyio/bybit-api)
 
 ---
 
@@ -1711,6 +1711,6 @@ If you want to learn more about integrating with the Bybit API and WebSockets:
 - Explore the [Bybit JavaScript examples on GitHub](../examples)
 - Review the full endpoint list: [Bybit JavaScript endpoint reference](./endpointFunctionList.md)
 - Check the Bybit JavaScript SDK on npm: [`bybit-api`](https://www.npmjs.com/package/bybit-api)
-- Browse the source code of the Bybit JavaScript SDK on GitHub: [`tiagosiebler/bybit-api`](https://github.com/tiagosiebler/bybit-api)
+- Browse the source code of the Bybit JavaScript SDK on GitHub: [`sieblyio/bybit-api`](https://github.com/sieblyio/bybit-api)
 - Review RSA auth: [Bybit RSA authentication example](../examples/Auth/RSA-sign.md)
 - Explore the wider SDK ecosystem: [Siebly.io](https://siebly.io)
