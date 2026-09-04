@@ -9,6 +9,7 @@ import {
 } from '../../types';
 import { WSAPIRequest } from '../../types/websockets/ws-api';
 import { DefaultLogger } from '../logger';
+import { APIRegion } from '../requestUtils';
 import { neverGuard } from '../typeGuards';
 
 export const WS_KEY_MAP = {
@@ -216,6 +217,15 @@ export const WS_BASE_URL_MAP: Record<
   },
 };
 
+const WS_MAINNET_REGION_DOMAIN_MAP: Partial<Record<APIRegion, string>> = {
+  TK: 'stream.bybit.tr',
+  KZ: 'stream.bybit.kz',
+  HK: 'stream.spark-fintech.com',
+  GE: 'stream.bybitgeorgia.ge',
+  ID: 'stream.bybit.id',
+  JP: 'stream.manepa.jp',
+};
+
 export function isPrivateWsTopic(topic: string): boolean {
   return PRIVATE_TOPICS.includes(topic);
 }
@@ -279,56 +289,56 @@ export function getWsUrl(
   const isDemoTrading = wsClientOptions.demoTrading;
   const isTestnet = wsClientOptions.testnet;
   const networkKey = isTestnet ? 'testnet' : 'livenet';
-  const isJP = wsClientOptions.restOptions?.apiRegion === 'JP';
+  const apiRegion =
+    wsClientOptions.apiRegion ?? wsClientOptions.restOptions?.apiRegion;
+  const regionalDomain =
+    !isTestnet && apiRegion
+      ? WS_MAINNET_REGION_DOMAIN_MAP[apiRegion]
+      : undefined;
+
+  const resolveUrl = (path: string, defaultUrl: string): string => {
+    return regionalDomain ? `wss://${regionalDomain}${path}` : defaultUrl;
+  };
 
   switch (wsKey) {
     case WS_KEY_MAP.v5Private: {
       if (isDemoTrading) {
         return DEMO_TRADING_ENDPOINT;
       }
-      if (isJP) {
-        const base = isTestnet
-          ? 'stream-testnet.manepa.jp'
-          : 'stream.manepa.jp';
-        return `wss://${base}/v5/private`;
-      }
-      return WS_BASE_URL_MAP.v5.private[networkKey];
+      return resolveUrl('/v5/private', WS_BASE_URL_MAP.v5.private[networkKey]);
     }
     case WS_KEY_MAP.v5PrivateTrade: {
       if (isDemoTrading) {
         return DEMO_TRADING_ENDPOINT;
       }
-      if (isJP) {
-        const base = isTestnet
-          ? 'stream-testnet.manepa.jp'
-          : 'stream.manepa.jp';
-        return `wss://${base}/v5/trade`;
-      }
-      return WS_BASE_URL_MAP[wsKey].private[networkKey];
+      return resolveUrl(
+        '/v5/trade',
+        WS_BASE_URL_MAP[wsKey].private[networkKey],
+      );
     }
     case WS_KEY_MAP.v5SpotPublic: {
-      if (isJP) {
-        return 'wss://stream.manepa.jp/v5/public/spot';
-      }
-      return WS_BASE_URL_MAP.v5SpotPublic.public[networkKey];
+      return resolveUrl(
+        '/v5/public/spot',
+        WS_BASE_URL_MAP.v5SpotPublic.public[networkKey],
+      );
     }
     case WS_KEY_MAP.v5LinearPublic: {
-      if (isJP) {
-        return 'wss://stream.manepa.jp/v5/public/linear';
-      }
-      return WS_BASE_URL_MAP.v5LinearPublic.public[networkKey];
+      return resolveUrl(
+        '/v5/public/linear',
+        WS_BASE_URL_MAP.v5LinearPublic.public[networkKey],
+      );
     }
     case WS_KEY_MAP.v5InversePublic: {
-      if (isJP) {
-        return 'wss://stream.manepa.jp/v5/public/inverse';
-      }
-      return WS_BASE_URL_MAP.v5InversePublic.public[networkKey];
+      return resolveUrl(
+        '/v5/public/inverse',
+        WS_BASE_URL_MAP.v5InversePublic.public[networkKey],
+      );
     }
     case WS_KEY_MAP.v5OptionPublic: {
-      if (isJP) {
-        return 'wss://stream.manepa.jp/v5/public/option';
-      }
-      return WS_BASE_URL_MAP.v5OptionPublic.public[networkKey];
+      return resolveUrl(
+        '/v5/public/option',
+        WS_BASE_URL_MAP.v5OptionPublic.public[networkKey],
+      );
     }
     default: {
       logger.error('getWsUrl(): Unhandled wsKey: ', {

@@ -728,15 +728,20 @@ export abstract class BaseWebsocketClient<
 
     const { protocols = [], ...wsOptions } = wsOptionsConfig;
     const siteId = this.options.siteId ?? this.options.restOptions?.siteId;
+    const apiRegion =
+      this.options.apiRegion ?? this.options.restOptions?.apiRegion;
 
     const finalWsOptions = {
       ...wsOptions,
       ...(!wsOptions.agent && legacyAgent ? { agent: legacyAgent } : undefined),
-      ...(siteId
+      ...(siteId || apiRegion === 'HK'
         ? {
             headers: {
               ...wsOptions.headers,
-              'x-site-id': siteId,
+              ...(apiRegion === 'HK'
+                ? { 'x-refer-site-id': 'HKG' }
+                : undefined),
+              ...(siteId ? { 'x-site-id': siteId } : undefined),
             },
           }
         : undefined),
