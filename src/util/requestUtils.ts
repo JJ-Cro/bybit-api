@@ -149,7 +149,7 @@ export function getRestBaseUrl(
     default: 'https://api.bybit.com',
     bytick: 'https://api.bytick.com',
     NL: 'https://api.bybit.nl',
-    TK: 'https://api.bybit-tr.com',
+    TK: 'https://api.bybit.tr',
     KZ: 'https://api.bybit.kz',
     HK: 'https://api.byhkbit.com',
     GE: 'https://api.bybitgeorgia.ge',

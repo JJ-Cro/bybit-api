@@ -42,7 +42,7 @@ const client = new RestClientV5({
   // apiRegion: 'HK',
   //
   //
-  // TK: routes to api.bybit-tr.com (for Turkey users)
+  // TK: routes to api.bybit.tr (for Turkey users)
   // apiRegion: 'TK',
 });
 

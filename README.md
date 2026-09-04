@@ -594,7 +594,7 @@ The following values are currently supported in this option:
 - `apiRegion: "default"`: the Bybit Global domain (same behaviour as above).
 - `apiRegion: "bytick"`: the alternative Bybit Global domain `api.bytick.com`.
 - `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bybit.nl`.
-- `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit-tr.com`.
+- `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit.tr`.
 - `apiRegion: "KZ"`: the dedicated Bybit Kazakhstan domain `api.bybit.kz`.
 - `apiRegion: "HK"`: the dedicated Bybit HK domain `api.byhkbit.com`.
 - `apiRegion: "GE"`: the dedicated Bybit Georgia domain `api.bybitgeorgia.ge`.
