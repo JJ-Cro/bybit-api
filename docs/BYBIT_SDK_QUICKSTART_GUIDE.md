@@ -35,7 +35,7 @@ siebly:
       - category-based product routing
       - demo trading
       - testnet
-      - regional REST and WebSocket routing
+      - regional REST API and WebSocket routing
       - public WebSockets
       - private WebSockets
       - WebSocket API commands
