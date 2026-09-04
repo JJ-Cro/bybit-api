@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EventEmitter from 'events';
+import type { ClientRequestArgs } from 'http';
 import WebSocket from 'isomorphic-ws';
 
 import {
@@ -726,12 +727,25 @@ export abstract class BaseWebsocketClient<
     const legacyAgent = (this.options.requestOptions as any)?.agent;
 
     const { protocols = [], ...wsOptions } = wsOptionsConfig;
+    const siteId = this.options.siteId ?? this.options.restOptions?.siteId;
+    const apiRegion =
+      this.options.apiRegion ?? this.options.restOptions?.apiRegion;
 
-    // Merge legacy agent if wsOptions doesn't have one
-    const finalWsOptions =
-      !wsOptions.agent && legacyAgent
-        ? { ...wsOptions, agent: legacyAgent }
-        : wsOptions;
+    const finalWsOptions = {
+      ...wsOptions,
+      ...(!wsOptions.agent && legacyAgent ? { agent: legacyAgent } : undefined),
+      ...(siteId || apiRegion === 'HK'
+        ? {
+            headers: {
+              ...wsOptions.headers,
+              ...(apiRegion === 'HK'
+                ? { 'x-refer-site-id': 'HKG' }
+                : undefined),
+              ...(siteId ? { 'x-site-id': siteId } : undefined),
+            },
+          }
+        : undefined),
+    } as WebSocket.ClientOptions | ClientRequestArgs;
 
     const ws: WebSocket & { wsKey?: string } = new WebSocket(
       url,

@@ -21,7 +21,8 @@ const client = new RestClientV5({
   //
   /**
    *
-   * There are also predefined API regions, which you can easily use with the "apiRegion" property:
+   * Predefined API regions are available through the `apiRegion` property.
+   * Choose the region where your Bybit account is registered:
    *
    */
   //
@@ -34,16 +35,50 @@ const client = new RestClientV5({
   // apiRegion: 'bytick',
   //
   //
-  // NL: routes to api.bybit.nl (for Netherland users)
+  // NL: routes to api.bybit.nl (for Netherlands users)
   // apiRegion: 'NL',
   //
   //
-  // HK: routes to api.byhkbit.com (for Hong Kong users)
+  // TK: routes to api.bybit.tr (for Turkey users)
+  // apiRegion: 'TK',
+  //
+  //
+  // KZ: routes to api.bybit.kz (for Kazakhstan users)
+  // apiRegion: 'KZ',
+  //
+  //
+  // HK: routes to api.spark-fintech.com and adds x-refer-site-id: HKG
+  // Testnet routes to api-testnet.spark-fintech.com
   // apiRegion: 'HK',
   //
   //
-  // TK: routes to api.bybit-tr.com (for Turkey users)
-  // apiRegion: 'TK',
+  // GE: routes to api.bybitgeorgia.ge (for Georgia users)
+  // apiRegion: 'GE',
+  //
+  //
+  // UAE: routes to api.bybit.ae (for United Arab Emirates users)
+  // apiRegion: 'UAE',
+  //
+  //
+  // EU: routes to api.bybit.eu (for EU and EEA users)
+  // apiRegion: 'EU',
+  //
+  //
+  // ID: routes to api.bybit.id (for Indonesian users)
+  // apiRegion: 'ID',
+  //
+  //
+  // JP: routes to api.manepa.jp (for Japan users)
+  // Testnet routes to api-testnet.manepa.jp
+  // apiRegion: 'JP',
+  //
+  //
+  /**
+   * Brazil and Argentina international accounts use the global API domain
+   * with an x-site-id header. Choose the site ID for your account:
+   */
+  // siteId: 'BRA_BTL',
+  // siteId: 'ARG_BTL',
 });
 
 (async () => {

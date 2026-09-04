@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import type { ClientRequestArgs } from 'http';
 import WebSocket from 'isomorphic-ws';
 
-import { RestClientOptions, WS_KEY_MAP } from '../../util';
+import { APIRegion, RestClientOptions, WS_KEY_MAP } from '../../util';
 
 /** For spot markets, spotV3 is recommended */
 export type APIMarket = 'v5';
@@ -120,6 +120,25 @@ export interface WSClientConfigurableOptions {
   /** Delay in milliseconds before respawning the connection */
   reconnectTimeout?: number;
 
+  /**
+   * Select WebSocket routing with the same region values as REST. Uses a
+   * dedicated mainnet stream when Bybit documents one for that region.
+   * Top-level `apiRegion` takes precedence over `restOptions.apiRegion`.
+   */
+  apiRegion?: APIRegion;
+
+  /**
+   * Site ID sent as `x-site-id` during the Node.js WebSocket handshake.
+   * Required for eligible international accounts that use the global stream domain,
+   * e.g. `BRA_BTL` for Brazil or `ARG_BTL` for Argentina.
+   */
+  siteId?: string;
+
+  /**
+   * REST options reused for WebSocket routing.
+   * Regional and site ID values are retained as fallbacks; prefer the matching
+   * top-level `apiRegion` and `siteId` options.
+   */
   restOptions?: RestClientOptions;
   requestOptions?: AxiosRequestConfig;
 

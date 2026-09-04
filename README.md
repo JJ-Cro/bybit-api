@@ -86,9 +86,10 @@ Professional Node.js, JavaScript & TypeScript SDK for the Bybit REST APIs, WebSo
 - [Websocket API - Sending Orders via WebSockets](#websocket-api---sending-orders-via-websockets)
 - [Consumer Load Balancing](#balancing-load-across-multiple-connections)
 
-## Bybit EU & Other Regions
+## Bybit EU and Other Regions
 
-- [REST API Usage with Bybit EU](#rest-api-usage-with-bybit-eu)
+- [`apiRegion` and `x-site-id`](#bybit-eu-and-other-regions-apiregion-and-x-site-id)
+- [REST and WebSocket API Usage with Bybit EU](#rest-and-websocket-api-usage-with-bybit-eu)
 
 ## Additional Features
 
@@ -237,10 +238,16 @@ const restClientOptions = {
 
   /**
    * Optionally override API domain used:
-   * apiRegion: 'default' | 'bytick' | 'NL' | 'HK' | 'TK',
+   * apiRegion: 'default' | 'bytick' | 'NL' | 'TK' | 'KZ' | 'HK' | 'GE' | 'UAE' | 'EU' | 'ID' | 'JP',
    **/
 
   // apiRegion: 'bytick',
+
+  /**
+   * Add the x-site-id header for an eligible international account that uses
+   * the global API domain, e.g. BRA_BTL for Brazil or ARG_BTL for Argentina.
+   */
+  // siteId: 'BRA_BTL',
 
   /** Default: false. Enable to parse/include per-API/endpoint rate limits in responses. */
   // parseAPIRateLimits: true,
@@ -353,6 +360,12 @@ const wsConfig = {
 
   /** Delay in milliseconds before respawning the connection */
   // reconnectTimeout: 500,
+
+  /** Select WebSocket routing using the same region values as REST */
+  // apiRegion: 'TK',
+
+  /** Add x-site-id for an eligible Brazil or Argentina international account */
+  // siteId: 'BRA_BTL',
 
   // override which URL to use for websocket connections
   // wsUrl: 'wss://stream.bytick.com/realtime'
@@ -563,33 +576,93 @@ Important: do not subscribe to the same topics on both clients or you will recei
 
 ---
 
-## Bybit EU & Other Regions
+## Bybit EU and Other Regions: apiRegion and x-site-id
 
-By default, this Node.js, JavaScript & TypeScript SDK uses the Bybit Global API & WebSocket domains. For regions where Bybit has dedicated regional domains, including the alternative Bybit Global domain (bytick), these can be configured in the REST Client using the `apiRegion` property.
+Bybit uses two regional API access models. Use the configuration that matches the site where your account is registered:
+
+| Account setup                            | REST API endpoint            | WebSocket endpoint                                                        | SDK configuration       |
+| ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| Account with a dedicated regional domain | Matching regional API domain | Regional mainnet stream when Bybit lists one, otherwise the global stream | Set `apiRegion`         |
+| Brazil international account             | `api.bybit.com`              | `stream.bybit.com`                                                        | Set `siteId: 'BRA_BTL'` |
+| Argentina international account          | `api.bybit.com`              | `stream.bybit.com`                                                        | Set `siteId: 'ARG_BTL'` |
+
+`apiRegion` selects the regional REST domain and, where Bybit lists one, the regional mainnet WebSocket domain. `siteId` keeps the default global domains and adds the `x-site-id` header to REST requests and Node.js WebSocket handshakes. This is only relevant if your account belongs to a specific region.
+
+See [Bybit's Integration Guidance](https://bybit-exchange.github.io/docs/v5/guide#authentication) for current regional requirements.
+
+### Dedicated Regional API Domains with apiRegion
+
+By default, this Node.js, JavaScript & TypeScript SDK uses the Bybit Global API and WebSocket domains. For regions where Bybit has dedicated regional domains, including the alternative Bybit Global domain (bytick), pass `apiRegion` directly to the REST or WebSocket client.
 
 The following values are currently supported in this option:
 
 - `apiRegion: undefined`: if missing or undefined, this SDK will default to the Bybit Global domain `api.bybit.com`.
 - `apiRegion: "default"`: the Bybit Global domain (same behaviour as above).
 - `apiRegion: "bytick"`: the alternative Bybit Global domain `api.bytick.com`.
-- `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bytick.nl`.
-- `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit-tr.com`.
+- `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bybit.nl`.
+- `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit.tr`.
 - `apiRegion: "KZ"`: the dedicated Bybit Kazakhstan domain `api.bybit.kz`.
-- `apiRegion: "HK"`: the dedicated Bybit HK domain `api.byhkbit.com`.
+- `apiRegion: "HK"`: the dedicated Bybit Hong Kong domain `api.spark-fintech.com`. The SDK also adds `x-refer-site-id: HKG`. Testnet uses `api-testnet.spark-fintech.com`.
 - `apiRegion: "GE"`: the dedicated Bybit Georgia domain `api.bybitgeorgia.ge`.
 - `apiRegion: "UAE"`: the dedicated Bybit United Arab Emirates domain `api.bybit.ae`.
 - `apiRegion: "EU"`: the dedicated Bybit EU/EEA domain `api.bybit.eu`.
+- `apiRegion: "ID"`: the dedicated Bybit Indonesia domain `api.bybit.id`.
+- `apiRegion: "JP"`: the dedicated Bybit Japan domain `api.manepa.jp`. Testnet uses `api-testnet.manepa.jp`.
+
+For WebSocket clients, the same option selects these mainnet stream domains:
+
+| `apiRegion` | WebSocket domain           |
+| ----------- | -------------------------- |
+| `TK`        | `stream.bybit.tr`          |
+| `KZ`        | `stream.bybit.kz`          |
+| `HK`        | `stream.spark-fintech.com` |
+| `GE`        | `stream.bybitgeorgia.ge`   |
+| `ID`        | `stream.bybit.id`          |
+| `JP`        | `stream.manepa.jp`         |
+
+For `default`, `bytick`, `NL`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`. For Hong Kong mainnet WebSocket connections, the SDK also adds `x-refer-site-id: HKG` automatically.
+
+```typescript
+const ws = new WebsocketClient({ apiRegion: 'TK' });
+ws.subscribeV5('tickers.BTCUSDT', 'linear');
+```
 
 New regions will be supported when they become available in the Bybit API. If you notice any regions that have not been added yet, please open a new issue on GitHub.
 
-### REST API Usage with Bybit EU
+### Brazil and Argentina International Accounts with x-site-id
 
-Below is an example for using this Node.js, TypeScript & JavaScript SDK for Bybit's APIs, using an account registered on the Bybit EU domain:
+Brazil and Argentina international accounts use the global REST API domain with a site-specific request header. Pass the matching value through the REST client's `siteId` option:
 
 ```typescript
-const { RestClientV5 } = require('bybit-api');
+import { RestClientV5, WebsocketClient } from 'bybit-api';
+
+const client = new RestClientV5({
+  key: process.env.BYBIT_API_KEY!,
+  secret: process.env.BYBIT_API_SECRET!,
+  siteId: 'BRA_BTL',
+});
+
+const ws = new WebsocketClient({
+  key: process.env.BYBIT_API_KEY!,
+  secret: process.env.BYBIT_API_SECRET!,
+  siteId: 'BRA_BTL',
+});
+```
+
+Use `siteId: 'ARG_BTL'` for an Argentina international account.
+
+The REST client sends `x-site-id` on every request. In Node.js, `WebsocketClient` and `WebsocketAPIClient` send it during the WebSocket handshake using the same top-level `siteId` option. Both use the global Bybit endpoint. Browser WebSocket connections cannot set custom handshake headers.
+
+See Bybit's [WebSocket connection guidance](https://bybit-exchange.github.io/docs/v5/ws/connect) for the regional requirement.
+
+### REST and WebSocket API Usage with Bybit EU
+
+Below is an example for using REST and WebSocket APIs with an account registered on Bybit EU:
+
+```typescript
+const { RestClientV5, WebsocketClient } = require('bybit-api');
 // or
-// import { RestClientV5 } from 'bybit-api';
+// import { RestClientV5, WebsocketClient } from 'bybit-api';
 
 const client = new RestClientV5({
   key: API_KEY,
@@ -607,6 +680,9 @@ client
   .catch((err) => {
     console.error('getAccountInfo error: ', err);
   });
+
+const ws = new WebsocketClient({ apiRegion: 'EU' });
+ws.subscribeV5('tickers.BTCUSDT', 'linear');
 ```
 
 ---

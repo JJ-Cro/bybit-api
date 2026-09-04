@@ -37,3 +37,4 @@ examples/ts-testnet-trade.ts
 examples/ts-testnet.ts
 *.pem
 .issue*
+docs/research

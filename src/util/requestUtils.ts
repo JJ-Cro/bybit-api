@@ -12,6 +12,7 @@ export type APIRegion =
   | 'GE'
   | 'UAE'
   | 'EU'
+  | 'ID'
   | 'JP';
 
 export interface RestClientOptions {
@@ -77,7 +78,13 @@ export interface RestClientOptions {
 
   apiRegion?: APIRegion;
 
-  /** Site ID header for regional access (e.g. 'ARG_BTL' for Argentina) */
+  /**
+   * Site ID sent as the `x-site-id` header on every REST request.
+   * WebSocket clients expose the same top-level `siteId` option.
+   * Required for eligible international accounts that use the global API domain,
+   * e.g. `BRA_BTL` for Brazil or `ARG_BTL` for Argentina.
+   * @see https://bybit-exchange.github.io/docs/v5/guide#authentication
+   */
   siteId?: string;
 
   /** Default: true. whether to try and post-process request exceptions. */
@@ -144,12 +151,13 @@ export function getRestBaseUrl(
     default: 'https://api.bybit.com',
     bytick: 'https://api.bytick.com',
     NL: 'https://api.bybit.nl',
-    TK: 'https://api.bybit-tr.com',
+    TK: 'https://api.bybit.tr',
     KZ: 'https://api.bybit.kz',
-    HK: 'https://api.byhkbit.com',
+    HK: 'https://api.spark-fintech.com',
     GE: 'https://api.bybitgeorgia.ge',
     UAE: 'https://api.bybit.ae',
     EU: 'https://api.bybit.eu',
+    ID: 'https://api.bybit.id',
     JP: 'https://api.manepa.jp',
   };
 
@@ -170,6 +178,9 @@ export function getRestBaseUrl(
   if (useTestnet) {
     if (restClientOptions.apiRegion === 'JP') {
       return 'https://api-testnet.manepa.jp';
+    }
+    if (restClientOptions.apiRegion === 'HK') {
+      return 'https://api-testnet.spark-fintech.com';
     }
     return exchangeBaseUrls.testnet;
   }
