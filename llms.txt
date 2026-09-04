@@ -3814,7 +3814,8 @@ import { RestClientV5 } from '../../src/index';
 // apiRegion: 'NL',
 //
 //
-// HK: routes to api.byhkbit.com (for Hong Kong users)
+// HK: routes to api.spark-fintech.com and adds x-refer-site-id: HKG
+// Testnet routes to api-testnet.spark-fintech.com
 // apiRegion: 'HK',
 //
 //
@@ -12994,6 +12995,8 @@ Supported API region values in this SDK:
 - `UAE`
 - `EU`
 - `JP`
+
+For a Hong Kong account, `apiRegion: 'HK'` selects `api.spark-fintech.com` on mainnet or `api-testnet.spark-fintech.com` on testnet. The SDK adds the required `x-refer-site-id: HKG` header automatically. This is separate from the `siteId` option used for Brazil and Argentina international accounts.
 
 New API regions will be supported as they become available. If you're looking for a region not yet supported, please get in touch.
 
@@ -22534,7 +22537,7 @@ The following values are currently supported in this option:
 - `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bybit.nl`.
 - `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit.tr`.
 - `apiRegion: "KZ"`: the dedicated Bybit Kazakhstan domain `api.bybit.kz`.
-- `apiRegion: "HK"`: the dedicated Bybit HK domain `api.byhkbit.com`.
+- `apiRegion: "HK"`: the dedicated Bybit Hong Kong domain `api.spark-fintech.com`. The SDK also adds `x-refer-site-id: HKG`. Testnet uses `api-testnet.spark-fintech.com`.
 - `apiRegion: "GE"`: the dedicated Bybit Georgia domain `api.bybitgeorgia.ge`.
 - `apiRegion: "UAE"`: the dedicated Bybit United Arab Emirates domain `api.bybit.ae`.
 - `apiRegion: "EU"`: the dedicated Bybit EU/EEA domain `api.bybit.eu`.

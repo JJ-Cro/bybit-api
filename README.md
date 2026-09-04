@@ -596,7 +596,7 @@ The following values are currently supported in this option:
 - `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bybit.nl`.
 - `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit.tr`.
 - `apiRegion: "KZ"`: the dedicated Bybit Kazakhstan domain `api.bybit.kz`.
-- `apiRegion: "HK"`: the dedicated Bybit HK domain `api.byhkbit.com`.
+- `apiRegion: "HK"`: the dedicated Bybit Hong Kong domain `api.spark-fintech.com`. The SDK also adds `x-refer-site-id: HKG`. Testnet uses `api-testnet.spark-fintech.com`.
 - `apiRegion: "GE"`: the dedicated Bybit Georgia domain `api.bybitgeorgia.ge`.
 - `apiRegion: "UAE"`: the dedicated Bybit United Arab Emirates domain `api.bybit.ae`.
 - `apiRegion: "EU"`: the dedicated Bybit EU/EEA domain `api.bybit.eu`.

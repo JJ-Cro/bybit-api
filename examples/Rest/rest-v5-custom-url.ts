@@ -38,7 +38,8 @@ const client = new RestClientV5({
   // apiRegion: 'NL',
   //
   //
-  // HK: routes to api.byhkbit.com (for Hong Kong users)
+  // HK: routes to api.spark-fintech.com and adds x-refer-site-id: HKG
+  // Testnet routes to api-testnet.spark-fintech.com
   // apiRegion: 'HK',
   //
   //

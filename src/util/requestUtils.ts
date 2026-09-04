@@ -151,7 +151,7 @@ export function getRestBaseUrl(
     NL: 'https://api.bybit.nl',
     TK: 'https://api.bybit.tr',
     KZ: 'https://api.bybit.kz',
-    HK: 'https://api.byhkbit.com',
+    HK: 'https://api.spark-fintech.com',
     GE: 'https://api.bybitgeorgia.ge',
     UAE: 'https://api.bybit.ae',
     EU: 'https://api.bybit.eu',
@@ -175,6 +175,9 @@ export function getRestBaseUrl(
   if (useTestnet) {
     if (restClientOptions.apiRegion === 'JP') {
       return 'https://api-testnet.manepa.jp';
+    }
+    if (restClientOptions.apiRegion === 'HK') {
+      return 'https://api-testnet.spark-fintech.com';
     }
     return exchangeBaseUrls.testnet;
   }
