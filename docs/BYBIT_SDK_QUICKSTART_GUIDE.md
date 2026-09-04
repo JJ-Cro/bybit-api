@@ -1155,6 +1155,8 @@ See also:
 Live is the default environment:
 
 ```typescript
+import { RestClientV5 } from 'bybit-api';
+
 const client = new RestClientV5({
   key: process.env.BYBIT_API_KEY!,
   secret: process.env.BYBIT_API_SECRET!,
@@ -1207,7 +1209,21 @@ ws.subscribeV5(['order', 'execution', 'position', 'wallet'], 'linear');
 
 Do not combine `testnet: true` with `demoTrading: true`. Bybit's demo trading docs also note that WebSocket API commands are not supported in demo trading, so use REST API demo trading or private demo streams for demo workflows, and use testnet for WebSocket API command testing.
 
-### Regional REST API domains
+### Regional REST API access: apiRegion and x-site-id
+
+Bybit uses two regional REST API access models. Use the configuration that matches the site where your account is registered:
+
+| Account setup | REST API endpoint | SDK configuration |
+| --- | --- | --- |
+| Account with a dedicated regional domain | The matching regional domain | Set `apiRegion` |
+| Brazil international account | `api.bybit.com` | Set `siteId: 'BRA_BTL'` |
+| Argentina international account | `api.bybit.com` | Set `siteId: 'ARG_BTL'` |
+
+`apiRegion` changes the REST API domain. `siteId` keeps the default global domain and adds the `x-site-id` header to every REST request. Only set `siteId` when Bybit documents it for your account. Do not derive or invent a value.
+
+See [Bybit's Integration Guidance](https://bybit-exchange.github.io/docs/v5/guide#authentication) for current regional requirements.
+
+#### Dedicated regional domains with apiRegion
 
 By default, REST API calls use the global Bybit domain. If your account belongs to a regional Bybit domain, set `apiRegion`:
 
@@ -1232,6 +1248,24 @@ Supported API region values in this SDK:
 - `EU`
 
 New API regions will be supported as they become available. If you're looking for a region not yet supported, please get in touch.
+
+#### Brazil and Argentina international accounts with x-site-id
+
+Brazil and Argentina international accounts use the global REST API domain with a site-specific request header. Pass the matching value through the REST client's `siteId` option:
+
+```typescript
+import { RestClientV5 } from 'bybit-api';
+
+const client = new RestClientV5({
+  key: process.env.BYBIT_API_KEY!,
+  secret: process.env.BYBIT_API_SECRET!,
+  siteId: 'BRA_BTL',
+});
+```
+
+Use `siteId: 'ARG_BTL'` for an Argentina international account.
+
+The `siteId` option currently configures REST requests only. Bybit documents `x-site-id` separately for [mainnet WebSocket connections](https://bybit-exchange.github.io/docs/v5/ws/connect).
 
 You can also pass `baseUrl` for a custom REST API domain, or `wsUrl` for a custom WebSocket URL when needed.
 

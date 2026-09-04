@@ -86,8 +86,9 @@ Professional Node.js, JavaScript & TypeScript SDK for the Bybit REST APIs, WebSo
 - [Websocket API - Sending Orders via WebSockets](#websocket-api---sending-orders-via-websockets)
 - [Consumer Load Balancing](#balancing-load-across-multiple-connections)
 
-## Bybit EU & Other Regions
+## Bybit EU and Other Regions
 
+- [`apiRegion` and `x-site-id`](#bybit-eu-and-other-regions-apiregion-and-x-site-id)
 - [REST API Usage with Bybit EU](#rest-api-usage-with-bybit-eu)
 
 ## Additional Features
@@ -241,6 +242,12 @@ const restClientOptions = {
    **/
 
   // apiRegion: 'bytick',
+
+  /**
+   * Add the x-site-id header for an eligible international account that uses
+   * the global API domain, e.g. BRA_BTL for Brazil or ARG_BTL for Argentina.
+   */
+  // siteId: 'BRA_BTL',
 
   /** Default: false. Enable to parse/include per-API/endpoint rate limits in responses. */
   // parseAPIRateLimits: true,
@@ -563,7 +570,21 @@ Important: do not subscribe to the same topics on both clients or you will recei
 
 ---
 
-## Bybit EU & Other Regions
+## Bybit EU and Other Regions: apiRegion and x-site-id
+
+Bybit uses two regional REST API access models. Use the configuration that matches the site where your account is registered:
+
+| Account setup | REST API endpoint | SDK configuration |
+| --- | --- | --- |
+| Account with a dedicated regional domain | The matching regional domain | Set `apiRegion` |
+| Brazil international account | `api.bybit.com` | Set `siteId: 'BRA_BTL'` |
+| Argentina international account | `api.bybit.com` | Set `siteId: 'ARG_BTL'` |
+
+`apiRegion` changes the REST API domain. `siteId` keeps the default global domain and adds the `x-site-id` header to every REST request. Only set `siteId` when Bybit documents it for your account. Do not derive or invent a value.
+
+See [Bybit's Integration Guidance](https://bybit-exchange.github.io/docs/v5/guide#authentication) for current regional requirements.
+
+### Dedicated Regional REST API Domains with apiRegion
 
 By default, this Node.js, JavaScript & TypeScript SDK uses the Bybit Global API & WebSocket domains. For regions where Bybit has dedicated regional domains, including the alternative Bybit Global domain (bytick), these can be configured in the REST Client using the `apiRegion` property.
 
@@ -581,6 +602,24 @@ The following values are currently supported in this option:
 - `apiRegion: "EU"`: the dedicated Bybit EU/EEA domain `api.bybit.eu`.
 
 New regions will be supported when they become available in the Bybit API. If you notice any regions that have not been added yet, please open a new issue on GitHub.
+
+### Brazil and Argentina International Accounts with x-site-id
+
+Brazil and Argentina international accounts use the global REST API domain with a site-specific request header. Pass the matching value through the REST client's `siteId` option:
+
+```typescript
+import { RestClientV5 } from 'bybit-api';
+
+const client = new RestClientV5({
+  key: process.env.BYBIT_API_KEY!,
+  secret: process.env.BYBIT_API_SECRET!,
+  siteId: 'BRA_BTL',
+});
+```
+
+Use `siteId: 'ARG_BTL'` for an Argentina international account.
+
+The `siteId` option currently configures REST requests only. Bybit documents `x-site-id` separately for [mainnet WebSocket connections](https://bybit-exchange.github.io/docs/v5/ws/connect).
 
 ### REST API Usage with Bybit EU
 
