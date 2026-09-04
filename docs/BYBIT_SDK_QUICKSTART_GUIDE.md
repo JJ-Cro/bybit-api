@@ -174,7 +174,7 @@ siebly:
       - Make category, symbol, account type, and position mode explicit in order code.
       - Use private order and execution streams to confirm final order state.
       - Backfill wallet, positions, open orders, and executions after private stream reconnects.
-      - "Prefer throwExceptions: true for RestClientV5 order workflows; if disabled, treat retCode === 0 as REST business acceptance."
+      - "Prefer throwExceptions: true for RestClientV5 order workflows; if disabled, treat retCode === 0 as REST API business acceptance."
       - Include triggerDirection for triggered stop-loss orders and normalize hydrated defaults before deciding keep, amend, cancel_place, cancel, or place.
       - Check regional API routing and exchange-side availability before production rollout.
       - Monitor proxy reachability, latency, and egress IP when a proxy is enabled.
@@ -533,7 +533,7 @@ placeDemoOrder().catch(console.error);
 
 This submits to Bybit demo trading because `demoTrading: true` is set. Do not remove that option or switch to live keys until you are ready to place real orders.
 
-For order workflows, prefer `throwExceptions: true` so non-zero Bybit business responses throw and can be handled in one structured catch path. If you intentionally set `throwExceptions: false`, a resolved REST promise can still be an exchange business rejection. Treat `retCode === 0` as acceptance and any non-zero `retCode` as a rejected or unknown submission state.
+For order workflows, prefer `throwExceptions: true` so non-zero Bybit business responses throw and can be handled in one structured catch path. If you intentionally set `throwExceptions: false`, a resolved REST API promise can still be an exchange business rejection. Treat `retCode === 0` as acceptance and any non-zero `retCode` as a rejected or unknown submission state.
 
 See also: [Demo trading example](../examples/Rest/demo-trading.ts)
 
@@ -1209,7 +1209,7 @@ ws.subscribeV5(['order', 'execution', 'position', 'wallet'], 'linear');
 
 Do not combine `testnet: true` with `demoTrading: true`. Bybit's demo trading docs also note that WebSocket API commands are not supported in demo trading, so use REST API demo trading or private demo streams for demo workflows, and use testnet for WebSocket API command testing.
 
-### Regional REST and WebSocket API access: apiRegion and x-site-id
+### Regional REST API and WebSocket access: apiRegion and x-site-id
 
 Bybit uses two regional API access models. Use the configuration that matches the site where your account is registered:
 
@@ -1219,13 +1219,13 @@ Bybit uses two regional API access models. Use the configuration that matches th
 | Brazil international account | `api.bybit.com` | `stream.bybit.com` | Set `siteId: 'BRA_BTL'` |
 | Argentina international account | `api.bybit.com` | `stream.bybit.com` | Set `siteId: 'ARG_BTL'` |
 
-`apiRegion` selects the regional REST domain and, where Bybit lists one, the regional mainnet WebSocket domain. `siteId` keeps the default global domains and adds the `x-site-id` header to REST requests and Node.js WebSocket handshakes. Only set `siteId` when Bybit documents it for your account. Do not derive or invent a value.
+`apiRegion` selects the regional REST API domain and, where Bybit lists one, the regional mainnet WebSocket domain. `siteId` keeps the default global domains and adds the `x-site-id` header to REST API requests and Node.js WebSocket handshakes. Only set `siteId` when Bybit documents it for your account. Do not derive or invent a value.
 
 See [Bybit's Integration Guidance](https://bybit-exchange.github.io/docs/v5/guide#authentication) for current regional requirements.
 
 #### Dedicated regional domains with apiRegion
 
-By default, REST and WebSocket clients use the global Bybit domains. If your account belongs to a regional Bybit domain, set `apiRegion` directly on each client:
+By default, REST API and WebSocket clients use the global Bybit domains. If your account belongs to a regional Bybit domain, set `apiRegion` directly on each client:
 
 ```typescript
 const client = new RestClientV5({
@@ -1263,13 +1263,13 @@ On WebSocket clients, these mainnet routes are selected automatically:
 - `ID`: `stream.bybit.id`
 - `JP`: `stream.manepa.jp`
 
-For `default`, `bytick`, `NL`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`.
+For `default`, `bytick`, `NL`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST API requests and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`.
 
 New API regions will be supported as they become available. If you're looking for a region not yet supported, please get in touch.
 
 #### Brazil and Argentina international accounts with x-site-id
 
-Brazil and Argentina international accounts use the global REST API domain with a site-specific request header. Pass the matching value through the REST client's `siteId` option:
+Brazil and Argentina international accounts use the global REST API domain with a site-specific request header. Pass the matching value through the REST API client's `siteId` option:
 
 ```typescript
 import { RestClientV5, WebsocketClient } from 'bybit-api';
@@ -1289,7 +1289,7 @@ const ws = new WebsocketClient({
 
 Use `siteId: 'ARG_BTL'` for an Argentina international account.
 
-The REST client sends `x-site-id` on every request. In Node.js, `WebsocketClient` and `WebsocketAPIClient` send it during the WebSocket handshake using the same top-level `siteId` option. Both use the global Bybit endpoint. Browser WebSocket connections cannot set custom handshake headers.
+The REST API client sends `x-site-id` on every request. In Node.js, `WebsocketClient` and `WebsocketAPIClient` send it during the WebSocket handshake using the same top-level `siteId` option. Both use the global Bybit endpoint. Browser WebSocket connections cannot set custom handshake headers.
 
 See Bybit's [WebSocket connection guidance](https://bybit-exchange.github.io/docs/v5/ws/connect) for the regional requirement.
 
