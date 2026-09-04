@@ -12993,6 +12993,7 @@ Supported API region values in this SDK:
 - `GE`
 - `UAE`
 - `EU`
+- `JP`
 
 New API regions will be supported as they become available. If you're looking for a region not yet supported, please get in touch.
 
@@ -22175,7 +22176,7 @@ const restClientOptions = {
 
   /**
    * Optionally override API domain used:
-   * apiRegion: 'default' | 'bytick' | 'NL' | 'HK' | 'TK',
+   * apiRegion: 'default' | 'bytick' | 'NL' | 'TK' | 'KZ' | 'HK' | 'GE' | 'UAE' | 'EU' | 'JP',
    **/
 
   // apiRegion: 'bytick',
@@ -22530,13 +22531,14 @@ The following values are currently supported in this option:
 - `apiRegion: undefined`: if missing or undefined, this SDK will default to the Bybit Global domain `api.bybit.com`.
 - `apiRegion: "default"`: the Bybit Global domain (same behaviour as above).
 - `apiRegion: "bytick"`: the alternative Bybit Global domain `api.bytick.com`.
-- `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bytick.nl`.
+- `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bybit.nl`.
 - `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit-tr.com`.
 - `apiRegion: "KZ"`: the dedicated Bybit Kazakhstan domain `api.bybit.kz`.
 - `apiRegion: "HK"`: the dedicated Bybit HK domain `api.byhkbit.com`.
 - `apiRegion: "GE"`: the dedicated Bybit Georgia domain `api.bybitgeorgia.ge`.
 - `apiRegion: "UAE"`: the dedicated Bybit United Arab Emirates domain `api.bybit.ae`.
 - `apiRegion: "EU"`: the dedicated Bybit EU/EEA domain `api.bybit.eu`.
+- `apiRegion: "JP"`: the dedicated Bybit Japan domain `api.manepa.jp`. Testnet uses `api-testnet.manepa.jp`.
 
 New regions will be supported when they become available in the Bybit API. If you notice any regions that have not been added yet, please open a new issue on GitHub.
 

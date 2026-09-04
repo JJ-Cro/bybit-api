@@ -1246,6 +1246,7 @@ Supported API region values in this SDK:
 - `GE`
 - `UAE`
 - `EU`
+- `JP`
 
 New API regions will be supported as they become available. If you're looking for a region not yet supported, please get in touch.
 
