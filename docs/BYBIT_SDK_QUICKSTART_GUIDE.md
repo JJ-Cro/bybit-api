@@ -1258,9 +1258,15 @@ New API regions will be supported as they become available. If you're looking fo
 Brazil and Argentina international accounts use the global REST API domain with a site-specific request header. Pass the matching value through the REST client's `siteId` option:
 
 ```typescript
-import { RestClientV5 } from 'bybit-api';
+import { RestClientV5, WebsocketClient } from 'bybit-api';
 
 const client = new RestClientV5({
+  key: process.env.BYBIT_API_KEY!,
+  secret: process.env.BYBIT_API_SECRET!,
+  siteId: 'BRA_BTL',
+});
+
+const ws = new WebsocketClient({
   key: process.env.BYBIT_API_KEY!,
   secret: process.env.BYBIT_API_SECRET!,
   siteId: 'BRA_BTL',
@@ -1269,7 +1275,9 @@ const client = new RestClientV5({
 
 Use `siteId: 'ARG_BTL'` for an Argentina international account.
 
-The `siteId` option currently configures REST requests only. Bybit documents `x-site-id` separately for [mainnet WebSocket connections](https://bybit-exchange.github.io/docs/v5/ws/connect).
+The REST client sends `x-site-id` on every request. In Node.js, `WebsocketClient` and `WebsocketAPIClient` send it during the WebSocket handshake using the same top-level `siteId` option. Both use the global Bybit endpoint. Browser WebSocket connections cannot set custom handshake headers.
+
+See Bybit's [WebSocket connection guidance](https://bybit-exchange.github.io/docs/v5/ws/connect) for the regional requirement.
 
 You can also pass `baseUrl` for a custom REST API domain, or `wsUrl` for a custom WebSocket URL when needed.
 

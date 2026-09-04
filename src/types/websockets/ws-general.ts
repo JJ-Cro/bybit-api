@@ -120,6 +120,17 @@ export interface WSClientConfigurableOptions {
   /** Delay in milliseconds before respawning the connection */
   reconnectTimeout?: number;
 
+  /**
+   * Site ID sent as `x-site-id` during the Node.js WebSocket handshake.
+   * Required for eligible international accounts that use the global stream domain,
+   * e.g. `BRA_BTL` for Brazil or `ARG_BTL` for Argentina.
+   */
+  siteId?: string;
+
+  /**
+   * REST options reused for WebSocket routing.
+   * `restOptions.siteId` is retained as a fallback; prefer top-level `siteId`.
+   */
   restOptions?: RestClientOptions;
   requestOptions?: AxiosRequestConfig;
 

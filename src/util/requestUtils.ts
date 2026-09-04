@@ -80,6 +80,7 @@ export interface RestClientOptions {
 
   /**
    * Site ID sent as the `x-site-id` header on every REST request.
+   * WebSocket clients expose the same top-level `siteId` option.
    * Required for eligible international accounts that use the global API domain,
    * e.g. `BRA_BTL` for Brazil or `ARG_BTL` for Argentina.
    * @see https://bybit-exchange.github.io/docs/v5/guide#authentication
