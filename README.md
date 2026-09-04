@@ -238,7 +238,7 @@ const restClientOptions = {
 
   /**
    * Optionally override API domain used:
-   * apiRegion: 'default' | 'bytick' | 'NL' | 'TK' | 'KZ' | 'HK' | 'GE' | 'UAE' | 'EU' | 'JP',
+   * apiRegion: 'default' | 'bytick' | 'NL' | 'TK' | 'KZ' | 'HK' | 'GE' | 'UAE' | 'EU' | 'ID' | 'JP',
    **/
 
   // apiRegion: 'bytick',
@@ -600,6 +600,7 @@ The following values are currently supported in this option:
 - `apiRegion: "GE"`: the dedicated Bybit Georgia domain `api.bybitgeorgia.ge`.
 - `apiRegion: "UAE"`: the dedicated Bybit United Arab Emirates domain `api.bybit.ae`.
 - `apiRegion: "EU"`: the dedicated Bybit EU/EEA domain `api.bybit.eu`.
+- `apiRegion: "ID"`: the dedicated Bybit Indonesia domain `api.bybit.id`.
 - `apiRegion: "JP"`: the dedicated Bybit Japan domain `api.manepa.jp`. Testnet uses `api-testnet.manepa.jp`.
 
 New regions will be supported when they become available in the Bybit API. If you notice any regions that have not been added yet, please open a new issue on GitHub.

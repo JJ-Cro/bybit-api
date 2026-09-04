@@ -1246,6 +1246,7 @@ Supported API region values in this SDK:
 - `GE`
 - `UAE`
 - `EU`
+- `ID`
 - `JP`
 
 For a Hong Kong account, `apiRegion: 'HK'` selects `api.spark-fintech.com` on mainnet or `api-testnet.spark-fintech.com` on testnet. The SDK adds the required `x-refer-site-id: HKG` header automatically. This is separate from the `siteId` option used for Brazil and Argentina international accounts.

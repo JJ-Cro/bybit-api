@@ -45,6 +45,10 @@ const client = new RestClientV5({
   //
   // TK: routes to api.bybit.tr (for Turkey users)
   // apiRegion: 'TK',
+  //
+  //
+  // ID: routes to api.bybit.id (for Indonesian users)
+  // apiRegion: 'ID',
 });
 
 (async () => {

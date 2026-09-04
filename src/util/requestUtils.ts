@@ -12,6 +12,7 @@ export type APIRegion =
   | 'GE'
   | 'UAE'
   | 'EU'
+  | 'ID'
   | 'JP';
 
 export interface RestClientOptions {
@@ -155,6 +156,7 @@ export function getRestBaseUrl(
     GE: 'https://api.bybitgeorgia.ge',
     UAE: 'https://api.bybit.ae',
     EU: 'https://api.bybit.eu',
+    ID: 'https://api.bybit.id',
     JP: 'https://api.manepa.jp',
   };
 
