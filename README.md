@@ -580,13 +580,13 @@ Important: do not subscribe to the same topics on both clients or you will recei
 
 Bybit uses two regional API access models. Use the configuration that matches the site where your account is registered:
 
-| Account setup | REST API endpoint | WebSocket endpoint | SDK configuration |
-| --- | --- | --- | --- |
-| Account with a dedicated regional domain | Matching regional API domain | Regional mainnet stream when Bybit lists one, otherwise the global stream | Set `apiRegion` |
-| Brazil international account | `api.bybit.com` | `stream.bybit.com` | Set `siteId: 'BRA_BTL'` |
-| Argentina international account | `api.bybit.com` | `stream.bybit.com` | Set `siteId: 'ARG_BTL'` |
+| Account setup                            | REST API endpoint            | WebSocket endpoint                                                        | SDK configuration       |
+| ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| Account with a dedicated regional domain | Matching regional API domain | Regional mainnet stream when Bybit lists one, otherwise the global stream | Set `apiRegion`         |
+| Brazil international account             | `api.bybit.com`              | `stream.bybit.com`                                                        | Set `siteId: 'BRA_BTL'` |
+| Argentina international account          | `api.bybit.com`              | `stream.bybit.com`                                                        | Set `siteId: 'ARG_BTL'` |
 
-`apiRegion` selects the regional REST domain and, where Bybit lists one, the regional mainnet WebSocket domain. `siteId` keeps the default global domains and adds the `x-site-id` header to REST requests and Node.js WebSocket handshakes. Only set `siteId` when Bybit documents it for your account. Do not derive or invent a value.
+`apiRegion` selects the regional REST domain and, where Bybit lists one, the regional mainnet WebSocket domain. `siteId` keeps the default global domains and adds the `x-site-id` header to REST requests and Node.js WebSocket handshakes. This is only relevant if your account belongs to a specific region.
 
 See [Bybit's Integration Guidance](https://bybit-exchange.github.io/docs/v5/guide#authentication) for current regional requirements.
 
@@ -611,14 +611,14 @@ The following values are currently supported in this option:
 
 For WebSocket clients, the same option selects these mainnet stream domains:
 
-| `apiRegion` | WebSocket domain |
-| --- | --- |
-| `TK` | `stream.bybit.tr` |
-| `KZ` | `stream.bybit.kz` |
-| `HK` | `stream.spark-fintech.com` |
-| `GE` | `stream.bybitgeorgia.ge` |
-| `ID` | `stream.bybit.id` |
-| `JP` | `stream.manepa.jp` |
+| `apiRegion` | WebSocket domain           |
+| ----------- | -------------------------- |
+| `TK`        | `stream.bybit.tr`          |
+| `KZ`        | `stream.bybit.kz`          |
+| `HK`        | `stream.spark-fintech.com` |
+| `GE`        | `stream.bybitgeorgia.ge`   |
+| `ID`        | `stream.bybit.id`          |
+| `JP`        | `stream.manepa.jp`         |
 
 For `default`, `bytick`, `NL`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`. For Hong Kong mainnet WebSocket connections, the SDK also adds `x-refer-site-id: HKG` automatically.
 
