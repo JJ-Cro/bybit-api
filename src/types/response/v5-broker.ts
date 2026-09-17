@@ -1,6 +1,6 @@
 interface EarningDetailV5 {
   userId: string;
-  bizType: 'SPOT' | 'DERIVATIVES' | 'OPTIONS' | 'CONVERT';
+  bizType: 'SPOT' | 'DERIVATIVES' | 'OPTIONS' | 'CONVERT' | 'FIAT_CONVERT';
   symbol: string;
   coin: string;
   earning: string;
@@ -21,6 +21,7 @@ export interface ExchangeBrokerEarningResultV5 {
     derivatives: TotalEarningCategoryV5[];
     options: TotalEarningCategoryV5[];
     convert: TotalEarningCategoryV5[];
+    fiatConvert?: TotalEarningCategoryV5[];
     total: TotalEarningCategoryV5[];
   };
   details: EarningDetailV5[];

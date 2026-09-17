@@ -21,6 +21,7 @@ export * from './v5-earn-fixed-term';
 export * from './v5-earn-liquidity-mining';
 export * from './v5-earn-pwm';
 export * from './v5-earn-token';
+export * from './v5-event';
 export * from './v5-market';
 export * from './v5-p2p-trading';
 export * from './v5-position';

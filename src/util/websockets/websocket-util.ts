@@ -17,6 +17,7 @@ export const WS_KEY_MAP = {
   v5LinearPublic: 'v5LinearPublic',
   v5InversePublic: 'v5InversePublic',
   v5OptionPublic: 'v5OptionPublic',
+  v5EventPublic: 'v5EventPublic',
   v5Private: 'v5Private',
   /**
    * The V5 Websocket API (for sending orders over WS)
@@ -34,6 +35,7 @@ export const PUBLIC_WS_KEYS = [
   WS_KEY_MAP.v5LinearPublic,
   WS_KEY_MAP.v5InversePublic,
   WS_KEY_MAP.v5OptionPublic,
+  WS_KEY_MAP.v5EventPublic,
 ] as string[];
 
 /** Used to automatically determine if a sub request should be to the public or private ws (when there's two) */
@@ -82,12 +84,14 @@ const PRIVATE_TOPICS = [
   'position.linear',
   'position.inverse',
   'position.option',
+  'position.event',
 
   'execution',
   'execution.spot',
   'execution.linear',
   'execution.inverse',
   'execution.option',
+  'execution.event',
 
   // v5 fast execution topics are private
   'execution.fast',
@@ -101,6 +105,7 @@ const PRIVATE_TOPICS = [
   'order.linear',
   'order.inverse',
   'order.option',
+  'order.event',
 
   'wallet',
   'greeks',
@@ -127,7 +132,7 @@ export interface WsTopicRequest<
 > {
   topic: TWSTopic;
   payload?: TWSPayload;
-  category?: CategoryV5;
+  category?: CategoryV5 | 'event';
 }
 
 /**
@@ -160,7 +165,8 @@ type PublicOnlyWsKeys =
   | 'v5SpotPublic'
   | 'v5LinearPublic'
   | 'v5InversePublic'
-  | 'v5OptionPublic';
+  | 'v5OptionPublic'
+  | 'v5EventPublic';
 
 export const WS_BASE_URL_MAP: Record<
   APIMarket,
@@ -215,6 +221,12 @@ export const WS_BASE_URL_MAP: Record<
       testnet: 'wss://stream-testnet.bybit.com/v5/public/option',
     },
   },
+  v5EventPublic: {
+    public: {
+      livenet: 'wss://stream.bybit.com/v5/public/event',
+      testnet: 'wss://stream-testnet.bybit.com/v5/public/event',
+    },
+  },
 };
 
 const WS_MAINNET_REGION_DOMAIN_MAP: Partial<Record<APIRegion, string>> = {
@@ -234,7 +246,7 @@ export function getWsKeyForTopic(
   market: APIMarket,
   topic: string,
   isPrivate?: boolean,
-  category?: CategoryV5,
+  category?: CategoryV5 | 'event',
 ): WsKey {
   const isPrivateTopic = isPrivate === true || PRIVATE_TOPICS.includes(topic);
   switch (market) {
@@ -255,6 +267,9 @@ export function getWsKeyForTopic(
         }
         case 'option': {
           return WS_KEY_MAP.v5OptionPublic;
+        }
+        case 'event': {
+          return WS_KEY_MAP.v5EventPublic;
         }
         case undefined: {
           throw new Error('Category cannot be undefined');
@@ -338,6 +353,12 @@ export function getWsUrl(
       return resolveUrl(
         '/v5/public/option',
         WS_BASE_URL_MAP.v5OptionPublic.public[networkKey],
+      );
+    }
+    case WS_KEY_MAP.v5EventPublic: {
+      return resolveUrl(
+        '/v5/public/event',
+        WS_BASE_URL_MAP.v5EventPublic.public[networkKey],
       );
     }
     default: {

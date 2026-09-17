@@ -5,3 +5,10 @@ export interface GetLiquidityMiningProductParamsV5 {
   baseCoin?: string;
   quoteCoin?: string;
 }
+
+export interface ReinvestLiquidityMiningParamsV5 {
+  productId: string;
+  orderLinkId: string;
+  positionId: string;
+  leverage?: string;
+}

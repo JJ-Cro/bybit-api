@@ -7,6 +7,7 @@ export type CopyTradingV5 = 'none' | 'both' | 'utaOnly' | 'normalOnly';
 
 export type InstrumentStatusV5 =
   | 'PreLaunch'
+  | 'PendingOpen'
   | 'Trading'
   | 'Settling'
   | 'Delivering'
@@ -328,7 +329,9 @@ export type TransactionTypeV5 =
   | 'INSTITUTION_LOAN_RESERVE_OUT'
   | 'PLATFORM_TOKEN_MNT_LIQRECALLEDMMNT'
   | 'PLATFORM_TOKEN_MNT_LIQRETURNEDMNT'
-  | 'DIVIDEND_SETTLEMENT';
+  | 'DIVIDEND_SETTLEMENT'
+  | 'FORWARD_SPLIT_SETTLE'
+  | 'REVERSE_SPLIT_SETTLE';
 
 export type PermissionTypeV5 =
   | 'ContractTrade'
@@ -368,7 +371,11 @@ export type ExecTypeV5 =
   | 'Settle'
   | 'BlockTrade'
   | 'MovePosition'
+  /** @deprecated Removed from Bybit execType; kept for older payloads. */
   | 'CorporateAction'
+  | 'ForwardSplitSettle'
+  | 'ReverseSplitSettle'
+  | 'Dividend'
   | 'UNKNOWN';
 
 /**

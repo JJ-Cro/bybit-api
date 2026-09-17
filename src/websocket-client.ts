@@ -115,14 +115,14 @@ export class WebsocketClient extends BaseWebsocketClient<
   /**
    * Subscribe to V5 topics & track/persist them.
    * @param wsTopics - topic or list of topics
-   * @param category - the API category this topic is for (e.g. "linear").
+   * @param category - the API category this topic is for (e.g. "linear", or "event" for Event Contract public topics).
    * The value is only important when connecting to public topics and will be ignored for private topics.
    * @param isPrivateTopic - optional - the library will try to detect private topics, you can use this
    * to mark a topic as private (if the topic isn't recognised yet)
    */
   public subscribeV5(
     wsTopics: WsTopic[] | WsTopic,
-    category: CategoryV5,
+    category: CategoryV5 | 'event',
     isPrivateTopic?: boolean,
   ): Promise<unknown>[] {
     const topicRequests = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
@@ -184,14 +184,14 @@ export class WebsocketClient extends BaseWebsocketClient<
    * connection reconnects.
    *
    * @param wsTopics - topic or list of topics
-   * @param category - the API category this topic is for (e.g. "linear"). The value is only
+   * @param category - the API category this topic is for (e.g. "linear", or "event" for Event Contract public topics). The value is only
    * important when connecting to public topics and will be ignored for private topics.
    * @param isPrivateTopic - optional - the library will try to detect private topics, you can
    * use this to mark a topic as private (if the topic isn't recognised yet)
    */
   public unsubscribeV5(
     wsTopics: WsTopic[] | WsTopic,
-    category: CategoryV5,
+    category: CategoryV5 | 'event',
     isPrivateTopic?: boolean,
   ): Promise<unknown>[] {
     const topicRequests = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
@@ -251,7 +251,7 @@ export class WebsocketClient extends BaseWebsocketClient<
    * Request subscription to one or more topics. Pass topics as either an array of strings,
    * or array of objects (if the topic has parameters).
    *
-   * Objects should be formatted as {topic: string, params: object, category: CategoryV5}.
+   * Objects should be formatted as {topic: string, params: object, category: CategoryV5 | 'event'}.
    *
    * - Subscriptions are automatically routed to the correct websocket connection.
    * - Authentication/connection is automatic.

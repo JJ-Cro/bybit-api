@@ -129,8 +129,8 @@ export interface WSClientConfigurableOptions {
 
   /**
    * Site ID sent as `x-site-id` during the Node.js WebSocket handshake.
-   * Required for eligible international accounts that use the global stream domain,
-   * e.g. `BRA_BTL` for Brazil or `ARG_BTL` for Argentina.
+   * Brazil and Argentina internal accounts now use `stream.bybit.com` without this header.
+   * Keep passing it only if a remaining site still requires `x-site-id`.
    */
   siteId?: string;
 

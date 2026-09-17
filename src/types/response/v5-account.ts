@@ -95,6 +95,7 @@ export interface FeeRateV5 {
   baseCoin: string;
   takerFeeRate: string;
   makerFeeRate: string;
+  rpiMakerFeeRate?: string;
 }
 
 export interface AccountInfoV5 {

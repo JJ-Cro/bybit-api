@@ -112,6 +112,34 @@ export type WSTradeEventV5 = WSPublicTopicEventV5<
   WSTradeV5[]
 >;
 
+export interface WSEventOrderbookV5 {
+  s: string;
+  r: [string, string][];
+  u: number;
+  seq: number;
+}
+
+export type WSEventOrderbookEventV5 = WSPublicTopicEventV5<
+  string,
+  'delta' | 'snapshot',
+  WSEventOrderbookV5
+>;
+
+export interface WSEventPublicTradeV5 {
+  T: number;
+  s: string;
+  r: string;
+  a: string;
+  i: string;
+  seq: number;
+}
+
+export type WSEventPublicTradeEventV5 = WSPublicTopicEventV5<
+  string,
+  'snapshot',
+  WSEventPublicTradeV5[]
+>;
+
 /**
  *  WSTickerV5 is the data structure for the "linear" ticker channel
  *  */
@@ -274,11 +302,33 @@ export interface WSPositionV5 {
   /** Position open timestamp (ms). Default `0` when not set. */
   openTime: number;
   seq: number;
+  netDeltaRatio?: string;
 }
 
 export type WSPositionEventV5 = WSPrivateTopicEventV5<
   'position',
   WSPositionV5[]
+>;
+
+export interface WSEventPositionV5 {
+  symbol: string;
+  baseCoin: string;
+  settleCoin: string;
+  side: string;
+  ecContractType: string;
+  ecDirection: string;
+  avgPayoutRatio: string;
+  positionValue: string;
+  ecSettleTime: string;
+  cumClosedPnl: string;
+  createdTime: string;
+  updatedTime: string;
+  seq: number;
+}
+
+export type WSEventPositionEventV5 = WSPrivateTopicEventV5<
+  'position.event',
+  WSEventPositionV5[]
 >;
 
 export interface WSAccountOrderV5 {
@@ -340,6 +390,46 @@ export type WSAccountOrderEventV5 = WSPrivateTopicEventV5<
   WSAccountOrderV5[]
 >;
 
+export interface WSEventOrderV5 {
+  category: 'event' | string;
+  orderId: string;
+  orderLinkId: string;
+  symbol: string;
+  symbolId: number;
+  side: string;
+  baseCoin: string;
+  quoteCoin: string;
+  settleCoin: string;
+  orderStatus: string;
+  ecContractType: string;
+  ecDirection: string;
+  ecDurationWindow: number;
+  ecTargetPrice: string;
+  ecLowerBound: string;
+  ecUpperBound: string;
+  ecOrderValue: string;
+  ecIndexPrice: string;
+  ecSettleTime: string;
+  payoutRatio: string;
+  orderAvgPayoutRatio: string;
+  cumExecValue: string;
+  cumExecFee: string;
+  leavesValue: string;
+  cumPayout: string;
+  createType: number;
+  cancelType: string;
+  rejectReason: string;
+  extraFees: unknown[];
+  transTime: string;
+  createdTime: string;
+  updatedTime: string;
+}
+
+export type WSEventOrderEventV5 = WSPrivateTopicEventV5<
+  'order' | 'order.event',
+  WSEventOrderV5[]
+>;
+
 export interface WSExecutionV5 {
   category: CategoryV5;
   symbol: string;
@@ -379,6 +469,50 @@ export interface WSExecutionV5 {
 export type WSExecutionEventV5 = WSPrivateTopicEventV5<
   'execution',
   WSExecutionV5[]
+>;
+
+export interface WSEventExecutionV5 {
+  category: 'event' | string;
+  transId: string;
+  execId: string;
+  orderId: string;
+  orderLinkId: string;
+  symbol: string;
+  symbolId: number;
+  baseCoin: string;
+  quoteCoin: string;
+  settleCoin: string;
+  side: string;
+  feeCoin: string;
+  execType: string;
+  execPrice: string;
+  execValue: string;
+  execFee: string;
+  execFeeRate: string;
+  orderPrice: string;
+  ecContractType: number | string;
+  ecDirection: number | string;
+  ecDurationWindow: number;
+  ecTargetPrice: string;
+  ecLowerBound: string;
+  ecUpperBound: string;
+  ecOrderValue: string;
+  ecIndexPrice?: string;
+  ecPayout: string;
+  entryPrice: string;
+  settlePrice: string;
+  grossPayoutRatio: string;
+  sessionRpl: string;
+  transTime: string;
+  settleTimeMs: string;
+  crossSeq: string;
+  timeInForce: string;
+  extraFees: unknown[];
+}
+
+export type WSEventExecutionEventV5 = WSPrivateTopicEventV5<
+  'execution' | 'execution.event',
+  WSEventExecutionV5[]
 >;
 
 export interface WSExecutionFastV5 {
