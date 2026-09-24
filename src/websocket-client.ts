@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {
-  CategoryV5,
   MessageEventLike,
+  WSCategoryV5,
   WSClientConfigurableOptions,
   WsKey,
   WsMarket,
@@ -122,7 +122,7 @@ export class WebsocketClient extends BaseWebsocketClient<
    */
   public subscribeV5(
     wsTopics: WsTopic[] | WsTopic,
-    category: CategoryV5 | 'event',
+    category: WSCategoryV5,
     isPrivateTopic?: boolean,
   ): Promise<unknown>[] {
     const topicRequests = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
@@ -191,7 +191,7 @@ export class WebsocketClient extends BaseWebsocketClient<
    */
   public unsubscribeV5(
     wsTopics: WsTopic[] | WsTopic,
-    category: CategoryV5 | 'event',
+    category: WSCategoryV5,
     isPrivateTopic?: boolean,
   ): Promise<unknown>[] {
     const topicRequests = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
@@ -251,7 +251,7 @@ export class WebsocketClient extends BaseWebsocketClient<
    * Request subscription to one or more topics. Pass topics as either an array of strings,
    * or array of objects (if the topic has parameters).
    *
-   * Objects should be formatted as {topic: string, params: object, category: CategoryV5 | 'event'}.
+   * Objects should be formatted as {topic: string, params: object, category: WSCategoryV5}.
    *
    * - Subscriptions are automatically routed to the correct websocket connection.
    * - Authentication/connection is automatic.

@@ -2,8 +2,8 @@ import WebSocket from 'isomorphic-ws';
 
 import {
   APIMarket,
-  CategoryV5,
   WebsocketClientOptions,
+  WSCategoryV5,
   WsKey,
   WsTopic,
 } from '../../types';
@@ -132,7 +132,7 @@ export interface WsTopicRequest<
 > {
   topic: TWSTopic;
   payload?: TWSPayload;
-  category?: CategoryV5 | 'event';
+  category?: WSCategoryV5;
 }
 
 /**
@@ -246,7 +246,7 @@ export function getWsKeyForTopic(
   market: APIMarket,
   topic: string,
   isPrivate?: boolean,
-  category?: CategoryV5 | 'event',
+  category?: WSCategoryV5,
 ): WsKey {
   const isPrivateTopic = isPrivate === true || PRIVATE_TOPICS.includes(topic);
   switch (market) {

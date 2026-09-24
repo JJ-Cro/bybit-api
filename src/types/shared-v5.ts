@@ -1,4 +1,6 @@
 export type CategoryV5 = 'spot' | 'linear' | 'inverse' | 'option';
+/** Public WS subscribe/routing category. Event Contract uses `'event'`; REST `CategoryV5` does not. */
+export type WSCategoryV5 = CategoryV5 | 'event';
 export type ContractTypeV5 =
   | 'InversePerpetual'
   | 'LinearPerpetual'

@@ -20498,7 +20498,7 @@ public connectPrivate(): Promise<WSConnectedResult | undefined>
    */
 public subscribeV5(
     wsTopics: WsTopic[] | WsTopic,
-    category: CategoryV5 | 'event',
+    category: WSCategoryV5,
     isPrivateTopic?: boolean,
 ): Promise<unknown>[]
 ⋮----
@@ -20522,7 +20522,7 @@ public subscribeV5(
    */
 public unsubscribeV5(
     wsTopics: WsTopic[] | WsTopic,
-    category: CategoryV5 | 'event',
+    category: WSCategoryV5,
     isPrivateTopic?: boolean,
 ): Promise<unknown>[]
 ⋮----
@@ -20538,7 +20538,7 @@ public unsubscribeV5(
    * Request subscription to one or more topics. Pass topics as either an array of strings,
    * or array of objects (if the topic has parameters).
    *
-   * Objects should be formatted as {topic: string, params: object, category: CategoryV5 | 'event'}.
+   * Objects should be formatted as {topic: string, params: object, category: WSCategoryV5}.
    *
    * - Subscriptions are automatically routed to the correct websocket connection.
    * - Authentication/connection is automatic.
