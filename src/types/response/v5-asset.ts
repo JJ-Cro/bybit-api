@@ -92,6 +92,8 @@ export interface UniversalTransferRecordV5 {
   toAccountType: AccountTypeV5;
   timestamp: string;
   status: string;
+  withdrawReqId?: string;
+  depositReqId?: string;
 }
 
 export interface AllowedDepositCoinInfoV5 {
@@ -350,6 +352,7 @@ export interface FundingAccountTransactionRecordV5 {
   showBusiTypeEn: string;
   description: string;
   descriptionEn: string;
+  currcCursor?: string;
 }
 
 /** When accountType=Alpha and category is farm, under `coinDetail` in sub-categories. */

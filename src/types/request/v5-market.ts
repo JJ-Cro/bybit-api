@@ -54,6 +54,7 @@ export interface GetInstrumentsInfoParamsV5 {
   /** Filter by instrument `symbolType` (e.g. `commodity`, `stock`, `forex` for linear). */
   symbolType?: InstrumentSymbolTypeV5;
   status?: InstrumentStatusV5;
+  /** For `category=option`, pass `All` to return all option symbols. */
   baseCoin?: string;
   limit?: number;
   cursor?: string;

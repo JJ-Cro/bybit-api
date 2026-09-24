@@ -31,3 +31,8 @@ export interface LiquidityMiningProductV5 {
 export interface LiquidityMiningProductResultV5 {
   products: LiquidityMiningProductV5[];
 }
+
+export interface ReinvestLiquidityMiningResultV5 {
+  orderId: string;
+  orderLinkId: string;
+}

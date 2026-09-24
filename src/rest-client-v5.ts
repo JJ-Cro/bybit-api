@@ -88,6 +88,7 @@ import {
   CancelAllOrdersParamsV5,
   CancelAllRFQResultV5,
   CancelBorrowOrderFixedParamsV5,
+  CancelEventQuoteParamsV5,
   CancelOrderParamsV5,
   CancelRFQParamsV5,
   CancelRFQQuoteItemV5,
@@ -169,6 +170,14 @@ import {
   EarnTokenPositionV5,
   EarnTokenProductV5,
   EarnYieldHistoryV5,
+  EventActiveOrdersResultV5,
+  EventInstrumentInfoResultV5,
+  EventOrderbookV5,
+  EventOrderHistoryResultV5,
+  EventPositionInfoResultV5,
+  EventQuoteResultV5,
+  EventSettlementRecordsResultV5,
+  EventTradeHistoryResultV5,
   ExchangeBrokerAccountInfoV5,
   ExchangeBrokerEarningResultV5,
   ExchangeBrokerSubAccountDepositRecordV5,
@@ -281,6 +290,13 @@ import {
   GetEarnTokenPositionParamsV5,
   GetEarnTokenProductParamsV5,
   GetEarnYieldHistoryParamsV5,
+  GetEventActiveOrdersParamsV5,
+  GetEventInstrumentsInfoParamsV5,
+  GetEventOrderbookParamsV5,
+  GetEventOrderHistoryParamsV5,
+  GetEventPositionInfoParamsV5,
+  GetEventSettlementRecordsParamsV5,
+  GetEventTradeHistoryParamsV5,
   GetExchangeBrokerEarningsParamsV5,
   GetExecutionListParamsV5,
   GetFeeGroupStructureParamsV5,
@@ -497,6 +513,8 @@ import {
   RedeemPwmInvestmentPlanParamsV5,
   RedeemPwmInvestmentPlanResultV5,
   ReferralCodesResultV5,
+  ReinvestLiquidityMiningParamsV5,
+  ReinvestLiquidityMiningResultV5,
   RenewBorrowOrderFixedParamsV5,
   RenewBorrowOrderFixedV5,
   RenewFixedRateBorrowParamsV5,
@@ -566,6 +584,7 @@ import {
   SubmitAdvanceEarnPlaceOrderParamsV5,
   SubmitDepositOriginatorInfoParamsV5,
   SubmitDepositOriginatorInfoResultV5,
+  SubmitEventQuoteParamsV5,
   SubmitFixedTermEarnOrderParamsV5,
   SubmitSpreadOrderParamsV5,
   SubmitStakeRedeemParamsV5,
@@ -4789,6 +4808,19 @@ export class RestClientV5 extends BaseRestClient {
   }
 
   /**
+   * Liquidity mining reinvest. Puts claimable yield of a position back into the pool.
+   * Async; success means the order was accepted. Use order status to track fill.
+   * Optional `leverage` is an integer string; defaults to "1" (no leverage).
+   *
+   * INFO: Earn permission required. Up to 5 requests/second per UID.
+   */
+  reinvestLiquidityMining(
+    params: ReinvestLiquidityMiningParamsV5,
+  ): Promise<APIResponseV3WithTime<ReinvestLiquidityMiningResultV5>> {
+    return this.postPrivate('/v5/earn/liquidity-mining/reinvest', params);
+  }
+
+  /**
    * Fixed-term / fixed saving — product list (Earn).
    *
    * INFO: No authentication. Up to 50 requests/second per IP.
@@ -5936,5 +5968,113 @@ export class RestClientV5 extends BaseRestClient {
       '/v5/spot-x/token-splash/user/activity-params',
       params,
     );
+  }
+
+  /**
+   *
+   ****** Event Trading (Event Contract) APIs
+   *
+   * Market data is public. Trade/position endpoints are market-maker only.
+   * Public WS: subscribeV5(topics, 'event'). Do not pass category "event" on REST Unified V5 methods.
+   *
+   */
+
+  /**
+   * Get Event Contract instruments info.
+   *
+   * INFO: No authentication.
+   */
+  getEventInstrumentsInfo(
+    params?: GetEventInstrumentsInfoParamsV5,
+  ): Promise<APIResponseV3WithTime<EventInstrumentInfoResultV5>> {
+    return this.get('/v5/event/instruments-info', params);
+  }
+
+  /**
+   * Get Event Contract 25-level orderbook. Each level is [payoutRatio, orderValue].
+   *
+   * INFO: No authentication.
+   */
+  getEventOrderbook(
+    params: GetEventOrderbookParamsV5,
+  ): Promise<APIResponseV3WithTime<EventOrderbookV5>> {
+    return this.get('/v5/event/orderbook', params);
+  }
+
+  /**
+   * Get Event Contract order history (up to 2 years). Default query window is 7 days if start/end omitted.
+   *
+   * INFO: Event Contract maker accounts only.
+   */
+  getEventOrderHistory(
+    params?: GetEventOrderHistoryParamsV5,
+  ): Promise<APIResponseV3WithTime<EventOrderHistoryResultV5>> {
+    return this.getPrivate('/v5/event/order-list', params);
+  }
+
+  /**
+   * Get Event Contract active (unfilled / partially filled) orders.
+   *
+   * INFO: Event Contract maker accounts only.
+   */
+  getEventActiveOrders(
+    params?: GetEventActiveOrdersParamsV5,
+  ): Promise<APIResponseV3WithTime<EventActiveOrdersResultV5>> {
+    return this.getPrivate('/v5/event/order-realtime', params);
+  }
+
+  /**
+   * Get Event Contract position info (UpDown, Target, Range).
+   *
+   * INFO: Event Contract maker accounts only.
+   */
+  getEventPositionInfo(
+    params?: GetEventPositionInfoParamsV5,
+  ): Promise<APIResponseV3WithTime<EventPositionInfoResultV5>> {
+    return this.getPrivate('/v5/event/positions', params);
+  }
+
+  /**
+   * Get Event Contract trade (execution) history (up to 2 years). Default query window is 7 days if start/end omitted.
+   *
+   * INFO: Event Contract maker accounts only.
+   */
+  getEventTradeHistory(
+    params: GetEventTradeHistoryParamsV5,
+  ): Promise<APIResponseV3WithTime<EventTradeHistoryResultV5>> {
+    return this.getPrivate('/v5/event/trades', params);
+  }
+
+  /**
+   * Get Event Contract settlement records (up to 2 years). Default query window is 7 days if start/end omitted.
+   *
+   * INFO: Event Contract maker accounts only.
+   */
+  getEventSettlementRecords(
+    params: GetEventSettlementRecordsParamsV5,
+  ): Promise<APIResponseV3WithTime<EventSettlementRecordsResultV5>> {
+    return this.getPrivate('/v5/event/settlements', params);
+  }
+
+  /**
+   * Submit an Event Contract payout-ratio quote.
+   *
+   * INFO: Event Contract maker accounts only.
+   */
+  submitEventQuote(
+    params: SubmitEventQuoteParamsV5,
+  ): Promise<APIResponseV3WithTime<EventQuoteResultV5>> {
+    return this.postPrivate('/v5/event/quotes', params);
+  }
+
+  /**
+   * Cancel an Event Contract quote. Pass orderLinkId and/or orderId.
+   *
+   * INFO: Event Contract maker accounts only.
+   */
+  cancelEventQuote(
+    params?: CancelEventQuoteParamsV5,
+  ): Promise<APIResponseV3WithTime<EventQuoteResultV5>> {
+    return this.postPrivate('/v5/event/cancel', params);
   }
 }

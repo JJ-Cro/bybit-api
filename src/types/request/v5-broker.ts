@@ -1,5 +1,5 @@
 export interface GetExchangeBrokerEarningsParamsV5 {
-  bizType?: 'SPOT' | 'DERIVATIVES' | 'OPTIONS' | 'CONVERT';
+  bizType?: 'SPOT' | 'DERIVATIVES' | 'OPTIONS' | 'CONVERT' | 'FIAT_CONVERT';
   begin?: string;
   end?: string;
   uid?: string;

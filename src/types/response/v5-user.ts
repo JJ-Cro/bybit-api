@@ -73,6 +73,7 @@ export interface ApiKeyInfoV5 {
   parentUid: string;
   kycLevel: 'LEVEL_DEFAULT' | 'LEVEL_1' | 'LEVEL_2';
   kycRegion: string;
+  isFixApi?: boolean;
 }
 
 export interface UpdateApiKeyResultV5 {

@@ -100,6 +100,9 @@ export interface LinearInverseInstrumentInfoV5 {
   } | null;
   skipCallAuction?: boolean; // For USDT pre-market contract
   displayName: string;
+  fullName?: string;
+  marketRegion?: string;
+  underlyingTicker?: string;
 }
 
 export interface OptionInstrumentInfoV5 {
@@ -442,6 +445,7 @@ export interface FeeGroupLevelV5 {
   takerFeeRate: string; // Taker fee rate
   makerFeeRate: string; // Maker fee rate
   makerRebate: string; // Maker rebate fee rate
+  rpiMakerRebate?: string;
 }
 
 export interface FeeGroupRatesV5 {

@@ -45,6 +45,7 @@ export interface OrderParamsV5 {
   slOrderType?: OrderTypeV5;
   bboSideType?: 'Queue' | 'Counterparty';
   bboLevel?: '1' | '2' | '3' | '4' | '5';
+  /** Limit IOC/FOK is supported when this is true. */
   rpiTakerAccess?: boolean;
 }
 

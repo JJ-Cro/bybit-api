@@ -66,6 +66,7 @@ export interface PositionV5 {
   positionIMByMp: string;
   positionMMByMp: string;
   seq: number;
+  netDeltaRatio?: string;
 }
 
 export interface SetRiskLimitResultV5 {

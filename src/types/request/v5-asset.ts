@@ -77,6 +77,8 @@ export interface GetUniversalTransferRecordsParamsV5 {
   endTime?: number;
   limit?: number;
   cursor?: string;
+  fromMemberId?: string;
+  toMemberId?: string;
 }
 
 export interface GetAllowedDepositCoinInfoParamsV5 {
