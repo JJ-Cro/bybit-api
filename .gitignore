@@ -38,3 +38,4 @@ examples/ts-testnet.ts
 *.pem
 .issue*
 docs/research
+tmp

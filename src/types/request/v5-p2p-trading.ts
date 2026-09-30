@@ -117,3 +117,35 @@ export interface GetP2PCounterpartyUserInfoParamsV5 {
   originalUid: string;
   orderId: string;
 }
+
+export interface GetP2PChatSessionsParamsV5 {
+  /** Pagination cursor. Pass 0 for the first page. */
+  lastId: number;
+  size: number;
+  /** 0: unread; 1: read; 2: all. */
+  readStatus: 0 | 1 | 2;
+  type?: 'GROUP' | 'SINGLE';
+}
+
+export interface GetP2PChatSessionIdParamsV5 {
+  /** Counterparty mask ID from the order detail's targetUserMaskId. */
+  userMaskId: string;
+}
+
+export interface SendP2PChatMessageParamsV5 {
+  /** Message content, up to 1000 characters. Use the uploaded URL for files. */
+  message: string;
+  contentType: 'str' | 'pic' | 'pdf' | 'video';
+  /** AES encrypted session ID. */
+  sessionId: string;
+  orderId: string;
+}
+
+export interface GetP2PChatMessagesParamsV5 {
+  /** Pagination cursor. Pass 0 to start from the latest message. */
+  lastId: number;
+  /** Page size, up to 30. */
+  limit: number;
+  /** AES encrypted session ID. */
+  sessionId: string;
+}

@@ -480,6 +480,34 @@ export interface P2POrderMessageV5 {
   onlyForCustomer: number;
 }
 
+export interface P2PChatSessionV5 {
+  sessionName: string;
+  sessionId: string;
+  type: 'GROUP' | 'SINGLE';
+  /** The docs specify integers, but response examples use strings. */
+  id: string | number;
+  unreadCount: string | number;
+}
+
+export interface P2PChatSessionsResponseV5 {
+  chatSession: P2PChatSessionV5[];
+}
+
+export interface P2PChatMessageV5 {
+  /** The docs specify integers, but response examples use strings. */
+  id: string | number;
+  sendUserNickName: string;
+  contentType: 'str' | 'pic' | 'pdf' | 'video';
+  /** JSON string containing content, msgCode, msgType, fileName and size. */
+  message: string;
+  /** Creation timestamp in milliseconds. Examples use strings. */
+  createDate: string | number;
+}
+
+export interface P2PChatMessagesResponseV5 {
+  messages: P2PChatMessageV5[];
+}
+
 export interface P2PUserInfoV5 {
   nickName: string;
   defaultNickName: boolean;

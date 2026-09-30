@@ -57,7 +57,9 @@ import {
   AmendOrderParamsV5,
   AmendSpreadOrderParamsV5,
   ApiKeyInfoV5,
+  APIP2PChatResponse,
   APIP2PResponse,
+  APIRateLimit,
   APIResponseV3,
   APIResponseV3WithTime,
   AssetInfoV5,
@@ -342,6 +344,9 @@ import {
   GetOptionDeliveryPriceParamsV5,
   GetOrderbookParamsV5,
   GetP2PAccountCoinsBalanceParamsV5,
+  GetP2PChatMessagesParamsV5,
+  GetP2PChatSessionIdParamsV5,
+  GetP2PChatSessionsParamsV5,
   GetP2PCounterpartyUserInfoParamsV5,
   GetP2POnlineAdsParamsV5,
   GetP2POrderMessagesParamsV5,
@@ -468,6 +473,8 @@ import {
   OrderSideV5,
   P2PAccountCoinsBalanceV5,
   P2PAdDetailV5,
+  P2PChatMessagesResponseV5,
+  P2PChatSessionsResponseV5,
   P2PCounterpartyUserInfoV5,
   P2PCreateAdResponseV5,
   P2POnlineAdsResponseV5,
@@ -545,6 +552,7 @@ import {
   RWAOrderListResultV5,
   RWAPositionListResultV5,
   RWAProductListResultV5,
+  SendP2PChatMessageParamsV5,
   SendP2POrderMessageParamsV5,
   SetAutoAddMarginParamsV5,
   SetAutoRepayModeParamsV5,
@@ -5758,6 +5766,31 @@ export class RestClientV5 extends BaseRestClient {
   }
 
   /**
+   *
+   * Chat P2P
+   */
+
+  /**
+   * Get P2P chat sessions with cursor pagination and read status filtering.
+   * @see https://bybit-exchange.github.io/docs/p2p/chat/get-chat-session-list
+   */
+  getP2PChatSessions(
+    params: GetP2PChatSessionsParamsV5,
+  ): Promise<APIP2PChatResponse<P2PChatSessionsResponseV5>> {
+    return this.postPrivate('/v5/p2p/chat/session/list_v1', params);
+  }
+
+  /**
+   * Get the AES encrypted P2P chat session ID for a counterparty.
+   * @see https://bybit-exchange.github.io/docs/p2p/chat/get-session-id
+   */
+  getP2PChatSessionId(
+    params: GetP2PChatSessionIdParamsV5,
+  ): Promise<APIP2PChatResponse<{ sessionId: string }>> {
+    return this.postPrivate('/v5/p2p/chat/session/getSessionId', params);
+  }
+
+  /**
    * Upload chat file for P2P order (Node.js only)
    *
    * Note: You must provide a Buffer. To upload from a file path, read it into a Buffer first:
@@ -5780,6 +5813,29 @@ export class RestClientV5 extends BaseRestClient {
     }>
   > {
     return this.postPrivateFile('/v5/p2p/oss/upload_file', params);
+  }
+
+  /**
+   * Send a message in a P2P chat session.
+   * For files, first call uploadP2PChatFile and use its URL as the message.
+   * @see https://bybit-exchange.github.io/docs/p2p/chat/send-chat-msg
+   */
+  sendP2PChatMessage(params: SendP2PChatMessageParamsV5): Promise<{
+    ret_code: number;
+    ret_msg: string;
+    rateLimitApi?: APIRateLimit;
+  }> {
+    return this.postPrivate('/v5/p2p/chat/message/send_v1', params);
+  }
+
+  /**
+   * Get P2P chat messages, ordered by creation time descending.
+   * @see https://bybit-exchange.github.io/docs/p2p/chat/get-message-list
+   */
+  getP2PChatMessages(
+    params: GetP2PChatMessagesParamsV5,
+  ): Promise<APIP2PChatResponse<P2PChatMessagesResponseV5>> {
+    return this.postPrivate('/v5/p2p/chat/message/listpage_v1', params);
   }
 
   /**
