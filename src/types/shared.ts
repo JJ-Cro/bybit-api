@@ -69,6 +69,14 @@ export type APIResponseV3WithTime<TResult, TExtInfo = {}> = APIResponseV3<
   TExtInfo
 > & { time: number };
 
+/** Flat response envelope used by the P2P chat APIs. */
+export interface APIP2PChatResponse<TResult> {
+  ret_code: number;
+  ret_msg: string;
+  result: TResult;
+  rateLimitApi?: APIRateLimit;
+}
+
 export interface APIP2PResponse<TResult, TExtInfo = {}> {
   ret_code: number;
   ret_msg: string;
