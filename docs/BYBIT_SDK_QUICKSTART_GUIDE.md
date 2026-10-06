@@ -213,11 +213,14 @@ siebly:
         summary: Browse SDK source, releases, issues, and endpoint coverage from GitHub.
         href: https://github.com/sieblyio/bybit-api
 -->
+
 # Bybit API JavaScript Tutorial for Node.js and TypeScript
 
 <!-- siebly:website-omit:start -->
+
 > [!TIP]
 > This guide can be read in tutorial format on the Siebly Website: [Bybit JavaScript REST API & WebSocket Tutorial](https://siebly.io/sdk/bybit/javascript/tutorial)
+
 <!-- siebly:website-omit:end -->
 
 This tutorial walks through a practical Bybit REST API, WebSocket stream, and WebSocket API integration using [`bybit-api`](https://www.npmjs.com/package/bybit-api), the Bybit JavaScript and TypeScript SDK by Siebly.io. It also covers HTTP, HTTPS, and SOCKS proxy configuration for REST API calls, streams, and WebSocket API connections.
@@ -238,6 +241,7 @@ The SDK handles the repetitive parts: HMAC and RSA request signing, Bybit API en
 ---
 
 <!-- siebly:section id="why-use-the-sdk" -->
+
 ## Why use the SDK
 
 The Bybit API is unified, but a real integration still has several moving parts:
@@ -264,6 +268,7 @@ The method names stay close to Bybit's endpoint names, while the SDK handles bas
 ---
 
 <!-- siebly:section id="install-and-api-keys" -->
+
 ## Install and API keys
 
 If you do not have Node.js installed yet, install it first. The SDK is published to both [GitHub](https://github.com/sieblyio/bybit-api) and [npm](https://www.npmjs.com/package/bybit-api).
@@ -333,6 +338,7 @@ For RSA setup details, see [examples/Auth/RSA-sign.md](../examples/Auth/RSA-sign
 ---
 
 <!-- siebly:section id="products-and-clients" -->
+
 ## Products and clients
 
 For new Bybit integrations, start with the current API. Older Bybit SDK surfaces were split into many product-specific clients; this SDK now centers the current API around one REST API client plus WebSocket clients.
@@ -363,6 +369,7 @@ As a rule of thumb:
 For a complete method map, see [docs/endpointFunctionList.md](./endpointFunctionList.md).
 
 <!-- siebly:section id="rest-api-streams-and-websocket-api" -->
+
 ### REST API, streams, and WebSocket API
 
 Bybit exposes several different integration flows. Keep them separate in your architecture:
@@ -379,6 +386,7 @@ Use the REST API when you want maximum endpoint coverage or a simple one-off req
 ---
 
 <!-- siebly:section id="start-building-first-calls" -->
+
 ## Start building: first calls
 
 If you only want the fastest path to a working integration, start here.
@@ -386,6 +394,7 @@ If you only want the fastest path to a working integration, start here.
 ### 1. First public REST API request
 
 <!-- siebly:snippet id="rest-api" -->
+
 ```typescript
 import { RestClientV5 } from 'bybit-api';
 
@@ -432,6 +441,7 @@ See also: [public REST API example](../examples/Rest/rest-v5-public.ts)
 ### 2. First public WebSocket stream
 
 <!-- siebly:snippet id="public-websocket" -->
+
 ```typescript
 import { WebsocketClient, isWsOrderbookEventV5 } from 'bybit-api';
 
@@ -451,7 +461,10 @@ ws.on('reconnect', (data) => console.log('reconnecting', data.wsKey));
 ws.on('reconnected', (data) => console.log('reconnected', data.wsKey));
 ws.on('exception', console.error);
 
-ws.subscribeV5(['orderbook.50.BTCUSDT', 'tickers.BTCUSDT', 'publicTrade.BTCUSDT'], 'linear');
+ws.subscribeV5(
+  ['orderbook.50.BTCUSDT', 'tickers.BTCUSDT', 'publicTrade.BTCUSDT'],
+  'linear',
+);
 ```
 
 For public streams, pass the category so the SDK can route the topic to the right public endpoint.
@@ -461,6 +474,7 @@ See also: [public WebSocket example](../examples/Websocket/Public/ws-public-v5.t
 ### 3. First private account WebSocket stream
 
 <!-- siebly:snippet id="private-websocket" -->
+
 ```typescript
 import { WebsocketClient } from 'bybit-api';
 
@@ -500,6 +514,7 @@ See also: [private WebSocket example](../examples/Websocket/Private/ws-private-v
 Use demo trading before placing live orders. Demo trading uses a separate Bybit demo account and separate API keys.
 
 <!-- siebly:snippet id="demo-order" -->
+
 ```typescript
 import { RestClientV5 } from 'bybit-api';
 
@@ -542,6 +557,7 @@ See also: [Demo trading example](../examples/Rest/demo-trading.ts)
 The WebSocket API lets you submit order commands over a persistent WebSocket connection and await responses. Bybit supports WebSocket API order commands in live and testnet environments, but not demo trading.
 
 <!-- siebly:snippet id="ws-api" -->
+
 ```typescript
 import { WebsocketAPIClient } from 'bybit-api';
 
@@ -592,6 +608,7 @@ See also: [WebSocket API client example](../examples/Websocket/WS-API/ws-api-cli
 ---
 
 <!-- siebly:section id="rest-api" -->
+
 ## REST API
 
 Most Bybit integrations start with `RestClientV5`. It covers the current REST API surface and uses Bybit's `category` parameter to distinguish product groups where the endpoint requires it.
@@ -888,7 +905,10 @@ const coinBalance = await client.getCoinBalance({
   coin: 'USDT',
 });
 
-const transferableCoins = await client.getTransferableCoinList('UNIFIED', 'FUND');
+const transferableCoins = await client.getTransferableCoinList(
+  'UNIFIED',
+  'FUND',
+);
 
 const deposits = await client.getDepositRecords({
   coin: 'USDT',
@@ -922,6 +942,7 @@ If an endpoint exists in Bybit's API docs, search for the endpoint path or metho
 ---
 
 <!-- siebly:section id="websocket-streams" -->
+
 ## WebSocket Streams
 
 Use `WebsocketClient` when you want event-driven updates instead of REST API polling. The same client handles public streams, private account streams, and raw WebSocket API commands.
@@ -969,7 +990,12 @@ ws.on('update', (data) => console.log('public update', JSON.stringify(data)));
 ws.on('exception', console.error);
 
 ws.subscribeV5(
-  ['orderbook.50.BTCUSDT', 'publicTrade.BTCUSDT', 'tickers.BTCUSDT', 'kline.5.BTCUSDT'],
+  [
+    'orderbook.50.BTCUSDT',
+    'publicTrade.BTCUSDT',
+    'tickers.BTCUSDT',
+    'kline.5.BTCUSDT',
+  ],
   'linear',
 );
 ```
@@ -1011,7 +1037,10 @@ ws.on('authenticated', (data) => console.log('authenticated', data.wsKey));
 ws.on('update', (data) => console.log('private update', JSON.stringify(data)));
 ws.on('exception', console.error);
 
-ws.subscribeV5(['order', 'execution', 'position', 'wallet', 'greeks'], 'linear');
+ws.subscribeV5(
+  ['order', 'execution', 'position', 'wallet', 'greeks'],
+  'linear',
+);
 ```
 
 Private topics currently share the private endpoint. The category parameter is ignored for private routing, but passing the category keeps your code consistent with `subscribeV5(...)`.
@@ -1044,6 +1073,7 @@ Do not subscribe to the same topic in multiple clients unless you intentionally 
 ---
 
 <!-- siebly:section id="websocket-api" -->
+
 ## WebSocket API
 
 Bybit's WebSocket API is a request/response API over a persistent WebSocket connection. In this SDK, you can use it in two ways:
@@ -1123,15 +1153,19 @@ const ws = new WebsocketClient({
   testnet: true,
 });
 
-const result = await ws.sendWSAPIRequest(WS_KEY_MAP.v5PrivateTrade, 'order.create', {
-  category: 'linear',
-  symbol: 'BTCUSDT',
-  side: 'Buy',
-  orderType: 'Limit',
-  qty: '0.001',
-  price: '10000',
-  timeInForce: 'PostOnly',
-});
+const result = await ws.sendWSAPIRequest(
+  WS_KEY_MAP.v5PrivateTrade,
+  'order.create',
+  {
+    category: 'linear',
+    symbol: 'BTCUSDT',
+    side: 'Buy',
+    orderType: 'Limit',
+    qty: '0.001',
+    price: '10000',
+    timeInForce: 'PostOnly',
+  },
+);
 
 console.log(result);
 ```
@@ -1148,6 +1182,7 @@ See also:
 ---
 
 <!-- siebly:section id="environments-and-regions" -->
+
 ## Environments and regions
 
 ### Live
@@ -1213,11 +1248,11 @@ Do not combine `testnet: true` with `demoTrading: true`. Bybit's demo trading do
 
 Bybit uses two regional API access models. Use the configuration that matches the site where your account is registered:
 
-| Account setup | REST API endpoint | WebSocket endpoint | SDK configuration |
-| --- | --- | --- | --- |
-| Account with a dedicated regional domain | Matching regional API domain | Regional mainnet stream when Bybit lists one, otherwise the global stream | Set `apiRegion` |
-| Brazil international account | `api.bybit.com` | `stream.bybit.com` | Set `siteId: 'BRA_BTL'` |
-| Argentina international account | `api.bybit.com` | `stream.bybit.com` | Set `siteId: 'ARG_BTL'` |
+| Account setup                            | REST API endpoint            | WebSocket endpoint                                                        | SDK configuration       |
+| ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| Account with a dedicated regional domain | Matching regional API domain | Regional mainnet stream when Bybit lists one, otherwise the global stream | Set `apiRegion`         |
+| Brazil international account             | `api.bybit.com`              | `stream.bybit.com`                                                        | Set `siteId: 'BRA_BTL'` |
+| Argentina international account          | `api.bybit.com`              | `stream.bybit.com`                                                        | Set `siteId: 'ARG_BTL'` |
 
 `apiRegion` selects the regional REST API domain and, where Bybit lists one, the regional mainnet WebSocket domain. `siteId` keeps the default global domains and adds the `x-site-id` header to REST API requests and Node.js WebSocket handshakes. Only set `siteId` when Bybit documents it for your account. Do not derive or invent a value.
 
@@ -1299,6 +1334,7 @@ See also: [custom REST API URL example](../examples/Rest/rest-v5-custom-url.ts)
 ---
 
 <!-- siebly:section id="proxies" -->
+
 ## Proxies for REST API and WebSocket
 
 Use a proxy when a deployment needs a fixed egress IP, must cross an approved corporate network, or has a controlled network failover path. A proxy does not change Bybit account eligibility, product categories, account mode, or the selected live, testnet, or demo environment.
@@ -1400,7 +1436,9 @@ const key = process.env.BYBIT_API_KEY;
 const secret = process.env.BYBIT_API_SECRET;
 
 if (!key || !secret) {
-  throw new Error('Set BYBIT_API_KEY and BYBIT_API_SECRET before running this example.');
+  throw new Error(
+    'Set BYBIT_API_KEY and BYBIT_API_SECRET before running this example.',
+  );
 }
 
 const proxyAgent = new HttpsProxyAgent(proxyUrl);
@@ -1519,6 +1557,7 @@ See also:
 ---
 
 <!-- siebly:section id="production-notes" -->
+
 ## Production notes
 
 Before a Bybit integration trades unattended, make these decisions explicit.
@@ -1546,22 +1585,23 @@ When the SDK emits `reconnect`, pause risky actions if your strategy depends on 
 ws.on('reconnected', async ({ wsKey }) => {
   console.log('reconnected', wsKey);
 
-  const [wallet, positions, regularOpenOrders, stopOpenOrders] = await Promise.all([
-    client.getWalletBalance({ accountType: 'UNIFIED' }),
-    client.getPositionInfo({ category: 'linear', settleCoin: 'USDT' }),
-    client.getActiveOrders({
-      category: 'linear',
-      settleCoin: 'USDT',
-      openOnly: 0,
-      orderFilter: 'Order',
-    }),
-    client.getActiveOrders({
-      category: 'linear',
-      settleCoin: 'USDT',
-      openOnly: 0,
-      orderFilter: 'StopOrder',
-    }),
-  ]);
+  const [wallet, positions, regularOpenOrders, stopOpenOrders] =
+    await Promise.all([
+      client.getWalletBalance({ accountType: 'UNIFIED' }),
+      client.getPositionInfo({ category: 'linear', settleCoin: 'USDT' }),
+      client.getActiveOrders({
+        category: 'linear',
+        settleCoin: 'USDT',
+        openOnly: 0,
+        orderFilter: 'Order',
+      }),
+      client.getActiveOrders({
+        category: 'linear',
+        settleCoin: 'USDT',
+        openOnly: 0,
+        orderFilter: 'StopOrder',
+      }),
+    ]);
 
   const openOrders = [
     ...(regularOpenOrders.result?.list ?? []),
@@ -1717,6 +1757,7 @@ For raw HTTP request/response tracing during local debugging, the repo also supp
 ---
 
 <!-- siebly:section id="faq" -->
+
 ## FAQ
 
 **Do I need API keys for public market data?**
@@ -1763,6 +1804,7 @@ No. This guide covers the common first steps and production concerns. For full m
 ---
 
 <!-- siebly:section id="next-steps" -->
+
 ## Next steps
 
 If you want to learn more about integrating with the Bybit API and WebSockets:
