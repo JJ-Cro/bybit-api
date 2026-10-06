@@ -238,7 +238,7 @@ const restClientOptions = {
 
   /**
    * Optionally override API domain used:
-   * apiRegion: 'default' | 'bytick' | 'NL' | 'TK' | 'KZ' | 'HK' | 'GE' | 'UAE' | 'EU' | 'ID' | 'JP',
+   * apiRegion: 'default' | 'bytick' | 'TK' | 'KZ' | 'HK' | 'GE' | 'UAE' | 'EU' | 'ID' | 'JP',
    **/
 
   // apiRegion: 'bytick',
@@ -599,7 +599,6 @@ The following values are currently supported in this option:
 - `apiRegion: undefined`: if missing or undefined, this SDK will default to the Bybit Global domain `api.bybit.com`.
 - `apiRegion: "default"`: the Bybit Global domain (same behaviour as above).
 - `apiRegion: "bytick"`: the alternative Bybit Global domain `api.bytick.com`.
-- `apiRegion: "NL"`: the dedicated Bybit Netherlands domain `api.bybit.nl`.
 - `apiRegion: "TK"`: the dedicated Bybit Turkey domain `api.bybit.tr`.
 - `apiRegion: "KZ"`: the dedicated Bybit Kazakhstan domain `api.bybit.kz`.
 - `apiRegion: "HK"`: the dedicated Bybit Hong Kong domain `api.spark-fintech.com`. The SDK also adds `x-refer-site-id: HKG`. Testnet uses `api-testnet.spark-fintech.com`.
@@ -620,7 +619,7 @@ For WebSocket clients, the same option selects these mainnet stream domains:
 | `ID`        | `stream.bybit.id`          |
 | `JP`        | `stream.manepa.jp`         |
 
-For `default`, `bytick`, `NL`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`. For Hong Kong mainnet WebSocket connections, the SDK also adds `x-refer-site-id: HKG` automatically.
+For `default`, `bytick`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`. For Hong Kong mainnet WebSocket connections, the SDK also adds `x-refer-site-id: HKG` automatically.
 
 ```typescript
 const ws = new WebsocketClient({ apiRegion: 'TK' });

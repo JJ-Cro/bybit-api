@@ -1242,7 +1242,6 @@ Supported API region values in this SDK:
 
 - `default`
 - `bytick`
-- `NL`
 - `TK`
 - `KZ`
 - `HK`
@@ -1263,7 +1262,7 @@ On WebSocket clients, these mainnet routes are selected automatically:
 - `ID`: `stream.bybit.id`
 - `JP`: `stream.manepa.jp`
 
-For `default`, `bytick`, `NL`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST API requests and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`.
+For `default`, `bytick`, `UAE`, and `EU`, WebSocket connections continue to use the global stream because Bybit does not list a dedicated V5 trading stream for those values. This means `apiRegion: 'EU'` selects `api.bybit.eu` for REST API requests and keeps `stream.bybit.com` for WebSocket. Testnet WebSocket connections use `stream-testnet.bybit.com`.
 
 New API regions will be supported as they become available. If you're looking for a region not yet supported, please get in touch.
 

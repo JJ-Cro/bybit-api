@@ -105,6 +105,8 @@ export interface TokenSplashProjectListResultV5 {
 export interface TokenSplashTradeTaskV5 {
   tradeRequiredAmount: string;
   tradeUnit: string;
+  /** Token counted by the trade task. On-chain tasks use the activity token ID. */
+  tradeToken?: string;
   tradedAmount: string;
   maxRewardAmount: string;
   estimatedRewardAmount: string;

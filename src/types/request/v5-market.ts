@@ -175,3 +175,11 @@ export interface GetFullDepthOrderbookParamsV5 {
   category: 'spot' | 'linear' | 'inverse';
   symbol: string;
 }
+
+export interface GetOptionBaseCoinsParamsV5 {
+  /**
+   * Comma-separated underlying types.
+   * 0 crypto, 1 commodity, 2 stock, 3 forex, 4 oil. Omit to return all types.
+   */
+  underlyingType?: string;
+}

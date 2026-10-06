@@ -103,6 +103,8 @@ export interface LinearInverseInstrumentInfoV5 {
   fullName?: string;
   marketRegion?: string;
   underlyingTicker?: string;
+  /** Symbol tags such as `ST`. Linear and inverse only. */
+  tags?: string[];
 }
 
 export interface OptionInstrumentInfoV5 {
@@ -464,4 +466,21 @@ export interface FeeGroupItemV5 {
 
 export interface FeeGroupStructureResponseV5 {
   list: FeeGroupItemV5[]; // List of fee group objects
+}
+
+export interface OptionBaseCoinV5 {
+  baseCoin: string;
+  quoteCoin: string;
+  settleCoin: string;
+  optionShowName: string;
+  /** UTC milliseconds. 0 when the option is not scheduled. */
+  optionOnlineTime: number;
+  /** 1 when tradable option symbols exist, otherwise 0 */
+  hasSymbol: 0 | 1;
+  /** 0 crypto, 1 commodity, 2 stock, 3 forex, 4 oil */
+  underlyingType: 0 | 1 | 2 | 3 | 4;
+}
+
+export interface OptionBaseCoinsResultV5 {
+  list: OptionBaseCoinV5[];
 }

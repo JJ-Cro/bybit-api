@@ -2,6 +2,18 @@ export interface GetEarnCouponListParamsV5 {
   category: 'FlexibleSaving' | 'DualAssets';
 }
 
+/** GET /v5/earn/flexible-saving/auto-savings. coins is a repeated query param, max 50. */
+export interface GetFlexibleSavingAutoSavingsParamsV5 {
+  coins?: string[];
+}
+
+/** POST /v5/earn/flexible-saving/auto-savings. Omit coin to update the global setting. */
+export interface SetFlexibleSavingAutoSavingsParamsV5 {
+  coin?: string;
+  isSelected: boolean;
+  purchaseImmediately?: boolean;
+}
+
 export interface SubmitStakeRedeemParamsV5 {
   category: string;
   orderType: 'Stake' | 'Redeem';
