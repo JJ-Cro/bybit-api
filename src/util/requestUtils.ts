@@ -5,7 +5,6 @@ import { APIRateLimit } from '../types';
 export type APIRegion =
   | 'default'
   | 'bytick'
-  | 'NL'
   | 'TK'
   | 'KZ'
   | 'HK'
@@ -114,6 +113,7 @@ export interface RestClientOptions {
  * @param sortProperties sort properties alphabetically before building a query string
  * @param encodeSerialisedValues URL encode value before serialising
  * @returns the params object as a serialised string key1=value1&key2=value2&etc
+ * Array values are repeated keys (coins=BTC&coins=ETH).
  */
 export function serializeParams(
   params: object = {},
@@ -127,9 +127,28 @@ export function serializeParams(
 
   return properties
     .map((key) => {
+      const rawValue = params[key];
+
+      if (Array.isArray(rawValue)) {
+        return rawValue
+          .map((item) => {
+            const value = encodeSerialisedValues
+              ? encodeURIComponent(item)
+              : item;
+
+            if (strict_validation === true && typeof item === 'undefined') {
+              throw new Error(
+                'Failed to sign API request due to undefined parameter',
+              );
+            }
+            return `${key}=${value}`;
+          })
+          .join('&');
+      }
+
       const value = encodeSerialisedValues
-        ? encodeURIComponent(params[key])
-        : params[key];
+        ? encodeURIComponent(rawValue)
+        : rawValue;
 
       if (strict_validation === true && typeof value === 'undefined') {
         throw new Error(
@@ -138,6 +157,7 @@ export function serializeParams(
       }
       return `${key}=${value}`;
     })
+    .filter((part) => part !== '')
     .join('&');
 }
 
@@ -150,7 +170,6 @@ export function getRestBaseUrl(
   } = {
     default: 'https://api.bybit.com',
     bytick: 'https://api.bytick.com',
-    NL: 'https://api.bybit.nl',
     TK: 'https://api.bybit.tr',
     KZ: 'https://api.bybit.kz',
     HK: 'https://api.spark-fintech.com',

@@ -32,5 +32,6 @@ export * from './v5-spot-leverage-token';
 export * from './v5-spot-x';
 export * from './v5-spreadtrading';
 export * from './v5-strategy';
+export * from './v5-tax';
 export * from './v5-trade';
 export * from './v5-user';
