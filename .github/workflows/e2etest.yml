@@ -33,9 +33,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Test parameter serialization
-        run: npm run test -- --runInBand --runTestsByPath test/util/serializeParams.test.ts
-
       - name: Test Public Read API Calls
         run: npm run test -- public.read.test.ts
 
@@ -74,7 +71,10 @@ jobs:
           API_KEY_COM_RSA: ${{ secrets.API_KEY_COM_RSA }}
           API_SECRET_COM_RSA: ${{ secrets.API_SECRET_COM_RSA }}
 
-      - name: Test live private GET serialization (HMAC)
+      - name: Test parameter serialization (public)
+        run: npm run test -- --runInBand --runTestsByPath test/util/serializeParams.test.ts
+
+      - name: Test parameter serialization (private GET, HMAC)
         run: npm run test -- --runInBand --runTestsByPath test/v5/private.serialization.test.ts
         env:
           API_KEY_COM: ${{ secrets.API_KEY_COM }}
