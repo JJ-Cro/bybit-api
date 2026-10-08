@@ -35,8 +35,7 @@ const client = new RestClientV5({
   // apiRegion: 'bytick',
   //
   //
-  // NL: routes to api.bybit.nl (for Netherlands users)
-  // apiRegion: 'NL',
+  // NL: Bybit removed api.bybit.nl from Integration Guidance on 2026-09-22. apiRegion no longer includes NL.
   //
   //
   // TK: routes to api.bybit.tr (for Turkey users)

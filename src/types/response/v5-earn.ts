@@ -35,6 +35,18 @@ export interface EarnCouponListResultV5 {
   awardCards: EarnAwardCardV5[];
 }
 
+export interface FlexibleSavingAutoSavingsCoinV5 {
+  coin: string;
+  isSelected: boolean;
+  maxStakingAmount: string;
+  apr: string;
+}
+
+export interface FlexibleSavingAutoSavingsV5 {
+  selectedAll: boolean;
+  coins: FlexibleSavingAutoSavingsCoinV5[];
+}
+
 export interface EarnProductV5 {
   category: string;
   estimateApr: string;

@@ -149,6 +149,7 @@ import {
   CreateSubMemberResultV5,
   CreateSupplyOrderFixedParamsV5,
   CreateSupplyOrderFixedV5,
+  CreateTaxBatchExportParamsV5,
   CryptoLoanPositionV5,
   CurrencyPositionTiersV5,
   CursorListV5,
@@ -211,6 +212,7 @@ import {
   FixedTermEarnProductListV5,
   FlexibleAvailableInventoryV5,
   FlexibleLoanAvailableInventoryV5,
+  FlexibleSavingAutoSavingsV5,
   FriendReferralRecordV5,
   FundingAccountTransactionRecordV5,
   FundingRateHistoryResponseV5,
@@ -314,6 +316,7 @@ import {
   GetFixedTermEarnProductParamsV5,
   GetFlexibleAvailableInventoryParamsV5,
   GetFlexibleLoanAvailableInventoryParamsV5,
+  GetFlexibleSavingAutoSavingsParamsV5,
   GetFriendReferralsParamsV5,
   GetFullDepthOrderbookParamsV5,
   GetFundingAccountTransactionHistoryParamsV5,
@@ -341,6 +344,7 @@ import {
   GetMovePositionHistoryParamsV5,
   GetOngoingFlexibleLoansParamsV5,
   GetOpenInterestParamsV5,
+  GetOptionBaseCoinsParamsV5,
   GetOptionDeliveryPriceParamsV5,
   GetOrderbookParamsV5,
   GetP2PAccountCoinsBalanceParamsV5,
@@ -408,6 +412,7 @@ import {
   GetSupplyOrderInfoFixedParamsV5,
   GetSupplyOrderQuoteFixedParamsV5,
   GetSystemStatusParamsV5,
+  GetTaxBatchExportParamsV5,
   GetTickersParamsV5,
   GetTokenSplashProjectListParamsV5,
   GetTokenSplashUserActivityParamsV5,
@@ -425,6 +430,7 @@ import {
   HoldToEarnAirdropYieldHistoryResultV5,
   IndexPriceComponentsResponseV5,
   InstitutionalLendingCoinDeltaAmountV5,
+  InstitutionalLendingDelayLiquidationStatusV5,
   InstitutionalLendingProductInfoV5,
   InstitutionalLoanLTVV5,
   InstrumentInfoResponseV5,
@@ -465,6 +471,7 @@ import {
   OngoingFlexibleLoanV5,
   OpenInterestResponseV5,
   OptionAssetInfoNestedResultV5,
+  OptionBaseCoinsResultV5,
   OptionDeliveryPriceV5,
   OrderbookResponseV5,
   OrderParamsV5,
@@ -560,6 +567,7 @@ import {
   SetCollateralCoinParamsV5,
   SetDeltaNeutralModeParamsV5,
   SetFixedTermEarnAutoInvestParamsV5,
+  SetFlexibleSavingAutoSavingsParamsV5,
   SetLeverageParamsV5,
   SetLimitPriceActionParamsV5,
   SetRiskLimitParamsV5,
@@ -604,6 +612,8 @@ import {
   SwitchIsolatedMarginParamsV5,
   SwitchPositionModeParamsV5,
   SystemStatusItemV5,
+  TaxBatchExportResultV5,
+  TaxBatchExportStatusV5,
   TickerLinearInverseV5,
   TickerOptionV5,
   TickerSpotV5,
@@ -1237,6 +1247,15 @@ export class RestClientV5 extends BaseRestClient {
     params: GetFeeGroupStructureParamsV5,
   ): Promise<APIResponseV3WithTime<FeeGroupStructureResponseV5>> {
     return this.get('/v5/market/fee-group-info', params);
+  }
+
+  /**
+   * Query option base coins, display names, launch times, and tradable symbol availability.
+   */
+  getOptionBaseCoins(
+    params?: GetOptionBaseCoinsParamsV5,
+  ): Promise<APIResponseV3WithTime<OptionBaseCoinsResultV5>> {
+    return this.get('/v5/market/option-base-coins', params);
   }
 
   /**
@@ -2884,6 +2903,36 @@ export class RestClientV5 extends BaseRestClient {
 
   /**
    *
+   ****** Tax
+   *
+   */
+
+  /**
+   * Export multiple tax report types in one batch. Returns a batchId for status polling.
+   */
+  createTaxBatchExport(
+    params: CreateTaxBatchExportParamsV5,
+  ): Promise<APIResponseV3WithTime<TaxBatchExportResultV5>> {
+    return this.postPrivate(
+      '/v5/fht/compliance/tax/private/batch_create',
+      params,
+    );
+  }
+
+  /**
+   * Query tax batch export task status and download URLs by batchId.
+   */
+  getTaxBatchExport(
+    params: GetTaxBatchExportParamsV5,
+  ): Promise<APIResponseV3WithTime<TaxBatchExportStatusV5>> {
+    return this.getPrivate(
+      '/v5/fht/compliance/tax/private/batch_query',
+      params,
+    );
+  }
+
+  /**
+   *
    ****** Affiliate APIs
    *
    */
@@ -4464,6 +4513,15 @@ export class RestClientV5 extends BaseRestClient {
   }
 
   /**
+   * Current LTV, liquidation status, and delay-liquidation timing for an institutional loan account.
+   */
+  getInstitutionalLendingDelayLiquidationStatus(): Promise<
+    APIResponseV3WithTime<InstitutionalLendingDelayLiquidationStatusV5>
+  > {
+    return this.getPrivate('/v5/ins-loan/delay-liq-status');
+  }
+
+  /**
    * Get Margin Coin Info
    * @deprecated
    */
@@ -4722,6 +4780,26 @@ export class RestClientV5 extends BaseRestClient {
     }>
   > {
     return this.get('/v5/earn/product', params);
+  }
+
+  /**
+   * Query Flexible Saving auto savings settings. Omit coins to return every supported coin.
+   */
+  getFlexibleSavingAutoSavings(
+    params?: GetFlexibleSavingAutoSavingsParamsV5,
+  ): Promise<APIResponseV3WithTime<FlexibleSavingAutoSavingsV5>> {
+    return this.getPrivate('/v5/earn/flexible-saving/auto-savings', params, {
+      serialiserArrayFormat: 'repeat',
+    });
+  }
+
+  /**
+   * Enable or disable Flexible Saving auto savings for one coin, or globally when coin is omitted.
+   */
+  setFlexibleSavingAutoSavings(
+    params: SetFlexibleSavingAutoSavingsParamsV5,
+  ): Promise<APIResponseV3WithTime<{}>> {
+    return this.postPrivate('/v5/earn/flexible-saving/auto-savings', params);
   }
 
   /**

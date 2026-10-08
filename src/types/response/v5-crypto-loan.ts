@@ -393,6 +393,14 @@ export interface InstitutionalLendingCoinDeltaAmountV5 {
   list: InstitutionalLendingCoinDeltaItemV5[];
 }
 
+export interface InstitutionalLendingDelayLiquidationStatusV5 {
+  ltv: string;
+  /** 0 normal, 1 passive liquidation, 2 callback liquidation, 3 delay liquidation */
+  liquidationStatus: 0 | 1 | 2 | 3;
+  delayLiqStartTime: string;
+  delayLiqRemainingSec: string;
+}
+
 export interface UnpaidInfoV5 {
   token: string; // Coin
   unpaidQty: string; // Unpaid principle

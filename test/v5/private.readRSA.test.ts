@@ -275,13 +275,17 @@ describe('Private READ V5 REST API Endpoints', () => {
     });
 
     it('querySubMemberAddress()', async () => {
-      expect(
-        await api.querySubMemberAddress(settleCoin, 'TRC20', 'fakeid'),
-      ).toMatchObject({
-        // ...successResponseObjectV3(),
-        // Expected, since sub account ID is fake
-        retCode: API_ERROR_CODE.PARAMS_MISSING_OR_WRONG,
-      });
+      const response = await api.querySubMemberAddress(
+        settleCoin,
+        'TRC20',
+        'fakeid',
+      );
+
+      // The fake subaccount ID is invalid, but compliance may reject it first.
+      expect([
+        API_ERROR_CODE.PARAMS_MISSING_OR_WRONG,
+        API_ERROR_CODE.COMPLIANCE_RULES_TRIGGERED,
+      ]).toContain(response.retCode);
     });
 
     it('getCoinInfo()', async () => {

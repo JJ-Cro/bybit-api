@@ -5,7 +5,6 @@ import { APIRateLimit } from '../types';
 export type APIRegion =
   | 'default'
   | 'bytick'
-  | 'NL'
   | 'TK'
   | 'KZ'
   | 'HK'
@@ -14,6 +13,23 @@ export type APIRegion =
   | 'EU'
   | 'ID'
   | 'JP';
+
+/** SDK options for an individual REST method call, separate from API parameters. */
+export interface RestCallOptions {
+  /**
+   * Array format for private GET query parameters. Values:
+   *
+   * - `comma` (default): `{ coins: ["BTC", "ETH"] }` becomes
+   *   `?coins=BTC%2CETH`. An empty array becomes `?coins=`.
+   * - `repeat`: `{ coins: ["BTC", "ETH"] }` becomes `?coins=BTC&coins=ETH`.
+   *   Some endpoints require this. Empty arrays are omitted completely.
+   *
+   * Examples assume `encodeSerialisedValues` is enabled (the default).
+   * Public requests and JSON/multipart bodies retain their existing
+   * serialization.
+   */
+  serialiserArrayFormat?: 'comma' | 'repeat';
+}
 
 export interface RestClientOptions {
   /** Your API key */
@@ -113,6 +129,7 @@ export interface RestClientOptions {
  * @param strict_validation throw if any properties are undefined
  * @param sortProperties sort properties alphabetically before building a query string
  * @param encodeSerialisedValues URL encode value before serialising
+ * @param arrayFormat array representation, defaulting to legacy comma coercion
  * @returns the params object as a serialised string key1=value1&key2=value2&etc
  */
 export function serializeParams(
@@ -120,25 +137,35 @@ export function serializeParams(
   strict_validation = false,
   sortProperties = true,
   encodeSerialisedValues = true,
+  arrayFormat: RestCallOptions['serialiserArrayFormat'] = 'comma',
 ): string {
   const properties = sortProperties
     ? Object.keys(params).sort()
     : Object.keys(params);
 
-  return properties
-    .map((key) => {
-      const value = encodeSerialisedValues
-        ? encodeURIComponent(params[key])
-        : params[key];
+  const parts: string[] = [];
+  for (const key of properties) {
+    const rawValue = params[key];
+    const repeatArray = arrayFormat === 'repeat' && Array.isArray(rawValue);
+    const values = repeatArray ? rawValue : [rawValue];
 
-      if (strict_validation === true && typeof value === 'undefined') {
+    for (const item of values) {
+      const value = encodeSerialisedValues ? encodeURIComponent(item) : item;
+
+      // Preserve legacy validation after coercion; repeated items validate raw values.
+      const validationValue = repeatArray ? item : value;
+      if (
+        strict_validation === true &&
+        typeof validationValue === 'undefined'
+      ) {
         throw new Error(
           'Failed to sign API request due to undefined parameter',
         );
       }
-      return `${key}=${value}`;
-    })
-    .join('&');
+      parts.push(`${key}=${value}`);
+    }
+  }
+  return parts.join('&');
 }
 
 export function getRestBaseUrl(
@@ -150,7 +177,6 @@ export function getRestBaseUrl(
   } = {
     default: 'https://api.bybit.com',
     bytick: 'https://api.bytick.com',
-    NL: 'https://api.bybit.nl',
     TK: 'https://api.bybit.tr',
     KZ: 'https://api.bybit.kz',
     HK: 'https://api.spark-fintech.com',

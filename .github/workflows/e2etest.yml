@@ -12,7 +12,6 @@ env:
   PROXY_PORT: ${{ secrets.PROXY_PORT }}
   PROXY_USER: ${{ secrets.PROXY_USER }}
 
-
 jobs:
   E2ETests:
     name: 'Build & Test'
@@ -57,13 +56,13 @@ jobs:
         env:
           API_KEY_COM_RSA: ${{ secrets.API_KEY_COM_RSA }}
           API_SECRET_COM_RSA: ${{ secrets.API_SECRET_COM_RSA }}
-  
+
       - name: Test Private Write RSA API Calls
         run: npm run test -- private.writeRSA.test.ts
         env:
           API_KEY_COM_RSA: ${{ secrets.API_KEY_COM_RSA }}
           API_SECRET_COM_RSA: ${{ secrets.API_SECRET_COM_RSA }}
-      
+
       - name: Test RSA/HMAC automatic detection
         run: npm run test -- rsa-auth.test.ts
         env:
@@ -72,4 +71,11 @@ jobs:
           API_KEY_COM_RSA: ${{ secrets.API_KEY_COM_RSA }}
           API_SECRET_COM_RSA: ${{ secrets.API_SECRET_COM_RSA }}
 
+      - name: Test parameter serialization (public)
+        run: npm run test -- --runInBand --runTestsByPath test/util/serializeParams.test.ts
 
+      - name: Test parameter serialization (private GET, HMAC)
+        run: npm run test -- --runInBand --runTestsByPath test/v5/private.serialization.test.ts
+        env:
+          API_KEY_COM: ${{ secrets.API_KEY_COM }}
+          API_SECRET_COM: ${{ secrets.API_SECRET_COM }}

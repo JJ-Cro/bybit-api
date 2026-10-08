@@ -41,20 +41,20 @@ describe('Private WRITE V5 REST API Endpoints', () => {
 
   describe('Trade APIs', () => {
     it('submitOrder()', async () => {
-      expect(
-        await api.submitOrder({
-          category: 'linear',
-          symbol: linearSymbol,
-          orderType: orderType,
-          side: orderSide,
-          qty: '1',
-          positionIdx: 1,
-        }),
-      ).toMatchObject({
-        // ...successResponseObjectV3(),
-        // retMsg: '',
-        retCode: API_ERROR_CODE.V5_INSUFFICIENT_BALANCE,
+      const response = await api.submitOrder({
+        category: 'linear',
+        symbol: linearSymbol,
+        orderType: orderType,
+        side: orderSide,
+        qty: '1',
+        positionIdx: 1,
       });
+
+      // Test accounts have no balance, but compliance may reject the request first.
+      expect([
+        API_ERROR_CODE.V5_INSUFFICIENT_BALANCE,
+        API_ERROR_CODE.COMPLIANCE_RULES_TRIGGERED,
+      ]).toContain(response.retCode);
     });
 
     it('amendOrder()', async () => {
