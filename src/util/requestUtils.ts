@@ -14,6 +14,23 @@ export type APIRegion =
   | 'ID'
   | 'JP';
 
+/** SDK options for an individual REST method call, separate from API parameters. */
+export interface RestCallOptions {
+  /**
+   * Array format for private GET query parameters. Values:
+   *
+   * - `comma` (default): `{ coins: ["BTC", "ETH"] }` becomes
+   *   `?coins=BTC%2CETH`. An empty array becomes `?coins=`.
+   * - `repeat`: `{ coins: ["BTC", "ETH"] }` becomes `?coins=BTC&coins=ETH`.
+   *   Some endpoints require this. Empty arrays are omitted completely.
+   *
+   * Examples assume `encodeSerialisedValues` is enabled (the default).
+   * Public requests and JSON/multipart bodies retain their existing
+   * serialization.
+   */
+  serialiserArrayFormat?: 'comma' | 'repeat';
+}
+
 export interface RestClientOptions {
   /** Your API key */
   key?: string;
@@ -112,53 +129,43 @@ export interface RestClientOptions {
  * @param strict_validation throw if any properties are undefined
  * @param sortProperties sort properties alphabetically before building a query string
  * @param encodeSerialisedValues URL encode value before serialising
+ * @param arrayFormat array representation, defaulting to legacy comma coercion
  * @returns the params object as a serialised string key1=value1&key2=value2&etc
- * Array values are repeated keys (coins=BTC&coins=ETH).
  */
 export function serializeParams(
   params: object = {},
   strict_validation = false,
   sortProperties = true,
   encodeSerialisedValues = true,
+  arrayFormat: RestCallOptions['serialiserArrayFormat'] = 'comma',
 ): string {
   const properties = sortProperties
     ? Object.keys(params).sort()
     : Object.keys(params);
 
-  return properties
-    .map((key) => {
-      const rawValue = params[key];
+  const parts: string[] = [];
+  for (const key of properties) {
+    const rawValue = params[key];
+    const repeatArray = arrayFormat === 'repeat' && Array.isArray(rawValue);
+    const values = repeatArray ? rawValue : [rawValue];
 
-      if (Array.isArray(rawValue)) {
-        return rawValue
-          .map((item) => {
-            const value = encodeSerialisedValues
-              ? encodeURIComponent(item)
-              : item;
+    for (const item of values) {
+      const value = encodeSerialisedValues ? encodeURIComponent(item) : item;
 
-            if (strict_validation === true && typeof item === 'undefined') {
-              throw new Error(
-                'Failed to sign API request due to undefined parameter',
-              );
-            }
-            return `${key}=${value}`;
-          })
-          .join('&');
-      }
-
-      const value = encodeSerialisedValues
-        ? encodeURIComponent(rawValue)
-        : rawValue;
-
-      if (strict_validation === true && typeof value === 'undefined') {
+      // Preserve legacy validation after coercion; repeated items validate raw values.
+      const validationValue = repeatArray ? item : value;
+      if (
+        strict_validation === true &&
+        typeof validationValue === 'undefined'
+      ) {
         throw new Error(
           'Failed to sign API request due to undefined parameter',
         );
       }
-      return `${key}=${value}`;
-    })
-    .filter((part) => part !== '')
-    .join('&');
+      parts.push(`${key}=${value}`);
+    }
+  }
+  return parts.join('&');
 }
 
 export function getRestBaseUrl(

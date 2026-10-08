@@ -4788,7 +4788,9 @@ export class RestClientV5 extends BaseRestClient {
   getFlexibleSavingAutoSavings(
     params?: GetFlexibleSavingAutoSavingsParamsV5,
   ): Promise<APIResponseV3WithTime<FlexibleSavingAutoSavingsV5>> {
-    return this.getPrivate('/v5/earn/flexible-saving/auto-savings', params);
+    return this.getPrivate('/v5/earn/flexible-saving/auto-savings', params, {
+      serialiserArrayFormat: 'repeat',
+    });
   }
 
   /**

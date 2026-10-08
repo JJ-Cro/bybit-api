@@ -10,6 +10,7 @@ import {
   getRestBaseUrl,
   isEUAPIRegion,
   parseRateLimitHeaders,
+  RestCallOptions,
   RestClientOptions,
   RestClientType,
   serializeParams,
@@ -58,6 +59,12 @@ if (ENABLE_HTTP_TRACE) {
     });
     return response;
   });
+}
+
+/** Request flags set by the REST method, rather than by the caller. */
+interface InternalRestCallOptions extends RestCallOptions {
+  isPublicApi: boolean;
+  isFileUpload?: boolean;
 }
 
 interface SignedRequestContext {
@@ -200,36 +207,56 @@ export default abstract class BaseRestClient {
     }
   }
 
-  get(endpoint: string, params?: any) {
-    const isPublicAPI = true;
-    return this._call('GET', endpoint, params, isPublicAPI);
+  get(endpoint: string, params?: any, callOptions?: RestCallOptions) {
+    return this._call('GET', endpoint, params, {
+      ...callOptions,
+      isPublicApi: true,
+      isFileUpload: false,
+    });
   }
 
-  getPrivate(endpoint: string, params?: any) {
-    const isPublicAPI = false;
-    return this._call('GET', endpoint, params, isPublicAPI);
+  getPrivate(endpoint: string, params?: any, callOptions?: RestCallOptions) {
+    return this._call('GET', endpoint, params, {
+      ...callOptions,
+      isPublicApi: false,
+      isFileUpload: false,
+    });
   }
 
-  post(endpoint: string, params?: any) {
-    const isPublicAPI = true;
-    return this._call('POST', endpoint, params, isPublicAPI);
+  post(endpoint: string, params?: any, callOptions?: RestCallOptions) {
+    return this._call('POST', endpoint, params, {
+      ...callOptions,
+      isPublicApi: true,
+      isFileUpload: false,
+    });
   }
 
-  postPrivate(endpoint: string, params?: any) {
-    const isPublicAPI = false;
-    return this._call('POST', endpoint, params, isPublicAPI);
+  postPrivate(endpoint: string, params?: any, callOptions?: RestCallOptions) {
+    return this._call('POST', endpoint, params, {
+      ...callOptions,
+      isPublicApi: false,
+      isFileUpload: false,
+    });
   }
 
-  postPrivateFile(endpoint: string, params?: FileUploadRequestParams) {
-    const isPublicAPI = false;
-    const isFileUpload = true;
-
-    return this._call('POST', endpoint, params, isPublicAPI, isFileUpload);
+  postPrivateFile(
+    endpoint: string,
+    params?: FileUploadRequestParams,
+    callOptions?: RestCallOptions,
+  ) {
+    return this._call('POST', endpoint, params, {
+      ...callOptions,
+      isPublicApi: false,
+      isFileUpload: true,
+    });
   }
 
-  deletePrivate(endpoint: string, params?: any) {
-    const isPublicAPI = false;
-    return this._call('DELETE', endpoint, params, isPublicAPI);
+  deletePrivate(endpoint: string, params?: any, callOptions?: RestCallOptions) {
+    return this._call('DELETE', endpoint, params, {
+      ...callOptions,
+      isPublicApi: false,
+      isFileUpload: false,
+    });
   }
 
   private async prepareSignParams<TParams = any>(
@@ -237,6 +264,7 @@ export default abstract class BaseRestClient {
     signMethod: SignMethod,
     params?: TParams,
     isPublicApi?: true,
+    callOptions?: RestCallOptions,
   ): Promise<UnsignedRequest<TParams>>;
 
   private async prepareSignParams<TParams = any>(
@@ -244,6 +272,7 @@ export default abstract class BaseRestClient {
     signMethod: SignMethod,
     params?: TParams,
     isPublicApi?: false | undefined,
+    callOptions?: RestCallOptions,
   ): Promise<SignedRequest<TParams>>;
 
   private async prepareSignParams<TParams extends SignedRequestContext = any>(
@@ -251,6 +280,7 @@ export default abstract class BaseRestClient {
     signMethod: SignMethod,
     params?: TParams,
     isPublicApi?: boolean,
+    callOptions?: RestCallOptions,
   ): Promise<SignedRequest<TParams> | UnsignedRequest<TParams>>;
 
   private async prepareSignParams<TParams extends SignedRequestContext = any>(
@@ -258,6 +288,7 @@ export default abstract class BaseRestClient {
     signMethod: SignMethod,
     params?: TParams,
     isPublicApi?: boolean,
+    callOptions?: RestCallOptions,
   ) {
     if (isPublicApi) {
       return {
@@ -278,17 +309,17 @@ export default abstract class BaseRestClient {
       this.timeOffset = await this.fetchTimeOffset();
     }
 
-    return this.signRequest(params || {}, method, signMethod);
+    return this.signRequest(params || {}, method, signMethod, callOptions);
   }
 
   /** Returns an axios request object. Handles signing process automatically if this is a private API call */
   private async buildRequest(
     method: Method,
     url: string,
-    params?: any,
-    isPublicApi?: boolean,
-    isFileUpload?: boolean,
+    params: any,
+    callOptions: InternalRestCallOptions,
   ): Promise<AxiosRequestConfig> {
+    const { isPublicApi, isFileUpload } = callOptions;
     const options: AxiosRequestConfig = {
       ...this.globalRequestOptions,
       url: url,
@@ -313,6 +344,7 @@ export default abstract class BaseRestClient {
       isFileUpload ? 'v5authWithFile' : 'v5auth',
       params,
       isPublicApi,
+      callOptions,
     );
 
     const headers: AxiosRequestConfig['headers'] = {
@@ -351,9 +383,8 @@ export default abstract class BaseRestClient {
   private async _call(
     method: Method,
     endpoint: string,
-    params?: any,
-    isPublicApi?: boolean,
-    isFileUpload?: boolean,
+    params: any,
+    callOptions: InternalRestCallOptions,
   ): Promise<any> {
     // Sanity check to make sure it's only ever prefixed by one forward slash
     const requestUrl = [this.baseUrl, endpoint].join(
@@ -365,14 +396,13 @@ export default abstract class BaseRestClient {
       method,
       requestUrl,
       params,
-      isPublicApi,
-      isFileUpload,
+      callOptions,
     );
 
     if (ENABLE_HTTP_TRACE) {
       console.log(
         'full request: ',
-        isFileUpload
+        callOptions.isFileUpload
           ? {
               ...options,
               data: `<binary data, ${options.data?.length} bytes>`,
@@ -458,6 +488,7 @@ export default abstract class BaseRestClient {
     data: T,
     method: Method,
     signMethod: SignMethod,
+    callOptions?: RestCallOptions,
   ): Promise<SignedRequest<T>> {
     const timestamp = Date.now() + (this.timeOffset || 0);
 
@@ -516,6 +547,7 @@ export default abstract class BaseRestClient {
               strictParamValidation,
               sortProperties,
               encodeSerialisedValues,
+              callOptions?.serialiserArrayFormat,
             )
           : JSON.stringify(res.originalParams);
 
