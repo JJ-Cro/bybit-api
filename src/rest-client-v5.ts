@@ -547,6 +547,7 @@ import {
   RepaymentHistoryFlexibleV5,
   RepaymentHistoryV5,
   RequestConvertQuoteParamsV5,
+  ReviewP2PSellerCancelOrderApplyParamsV5,
   RFQConfigV5,
   RFQDetailItemV5,
   RFQHistory,
@@ -5832,6 +5833,21 @@ export class RestClientV5 extends BaseRestClient {
     orderId: string;
   }): Promise<APIResponseV3WithTime<null>> {
     return this.postPrivate('/v5/p2p/order/finish', params);
+  }
+
+  /**
+   * Buyer review of a pending seller cancel request.
+   * Only the order buyer can call this, and only while that request is pending.
+   * rejectReason and rejectProofs are required when examineResult is REJECT.
+   * @see https://bybit-exchange.github.io/docs/p2p/order/review-seller-cancel-order-apply
+   */
+  reviewP2PSellerCancelOrderApply(
+    params: ReviewP2PSellerCancelOrderApplyParamsV5,
+  ): Promise<APIResponseV3WithTime<null>> {
+    return this.postPrivate(
+      '/v5/p2p/order/buyer/examine/sellerCancelOrderApply',
+      params,
+    );
   }
 
   /**

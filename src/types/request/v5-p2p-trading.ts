@@ -99,6 +99,23 @@ export interface MarkP2POrderAsPaidParamsV5 {
   paymentId: string;
 }
 
+export type P2PSellerCancelExamineResultV5 = 'PASS' | 'REJECT';
+
+export type P2PSellerCancelRejectReasonV5 =
+  | 'buyerRefuseOrderCancelReason_haveMadePayment'
+  | 'buyerRefuseOrderCancelReason_haveNotReceivedFullRefund'
+  | 'buyerRefuseOrderCancelReason_others';
+
+export interface ReviewP2PSellerCancelOrderApplyParamsV5 {
+  orderId: string;
+  examineResult: P2PSellerCancelExamineResultV5;
+  /** Required when examineResult is REJECT. */
+  rejectReason?: P2PSellerCancelRejectReasonV5;
+  /** Comma-separated proof URLs. Required when examineResult is REJECT. */
+  rejectProofs?: string;
+  rejectRemark?: string;
+}
+
 export interface SendP2POrderMessageParamsV5 {
   message: string;
   contentType: string;

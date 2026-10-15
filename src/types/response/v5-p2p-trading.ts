@@ -176,6 +176,8 @@ export interface P2PAdDetailV5 {
   status: number;
   createDate: string;
   payments: string[];
+  /** Personal ads list only. Empty string means the ad is not hidden. */
+  hiddenReason?: string;
   orderNum: number;
   finishNum: number;
   recentOrderNum: number;
@@ -262,6 +264,8 @@ export interface P2POrderV5 {
   fee: string;
   targetNickName: string;
   targetUserId: string;
+  /** Pending orders. Pass this to getP2PChatSessionId as userMaskId. */
+  targetUserMaskId?: string;
   status: number;
   selfUnreadMsgCount: string;
   createDate: string;
@@ -364,6 +368,8 @@ export interface P2POrderDetailV5 {
   targetAccountId: string;
   targetUserId: string;
   targetNickName: string;
+  /** Counterparty mask ID. Pass this to getP2PChatSessionId as userMaskId. */
+  targetUserMaskId: string;
   targetFirstName: string;
   targetSecondName: string;
   targetUserAuthStatus: number;
@@ -441,6 +447,8 @@ export interface P2POrderDetailV5 {
   cancelReason: string;
   sellerCancelExamineRemainTime: string;
   needSellerExamineCancel: boolean;
+  /** True when the buyer must review a pending seller cancel request. */
+  needBuyerExamineCancel: boolean;
   couponCurrencyAmount: string;
   totalCurrencyAmount: string;
   usedCoupon: boolean;
