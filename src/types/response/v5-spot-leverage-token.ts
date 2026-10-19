@@ -111,6 +111,14 @@ export interface ManualBorrowResultV5 {
 
 export interface MaxBorrowableAmountV5 {
   currency: string;
+  /**
+   * Maximum borrowable amount. Can be `"0"` when spot margin mode is off, or
+   * when no collateral coins are enabled. The app can still show a borrow
+   * amount after a collateral coin is selected. Undocumented; Bybit API staff
+   * confirmed this on 15 Oct 2026. Check `getSpotMarginState()`,
+   * `setCollateralCoin()` (`POST /v5/account/set-collateral-switch`), and
+   * `toggleSpotMarginTrade()` first.
+   */
   maxLoan: string;
 }
 

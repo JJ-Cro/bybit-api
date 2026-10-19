@@ -152,8 +152,20 @@ export interface SpotInstrumentInfoV5 {
   lotSizeFilter: {
     basePrecision: string;
     quotePrecision: string;
+    /**
+     * @deprecated Spot order size is enforced by `minOrderAmt` only.
+     * Bybit API staff confirmed on 15 Oct 2026 that `minOrderQty` no longer
+     * applies for spot. Undocumented: broker and CCXT users have a 1 USDT
+     * minimum; direct API users have a 5 USDT minimum.
+     */
     minOrderQty: string;
     maxOrderQty: string;
+    /**
+     * Minimum order amount in the quote coin. This is the spot minimum that
+     * applies. Undocumented; Bybit API staff confirmed on 15 Oct 2026 that
+     * broker and CCXT users have a 1 USDT minimum, and direct API users have
+     * a 5 USDT minimum.
+     */
     minOrderAmt: string;
     maxOrderAmt: string;
     maxLimitOrderQty: string;
@@ -179,6 +191,48 @@ type InstrumentInfoV5Mapping = {
 
 export type InstrumentInfoResponseV5<C extends CategoryV5> =
   CategoryCursorListV5<InstrumentInfoV5Mapping[C], C>;
+
+/**
+ * One row from GET /v5/market/instrument-summary.
+ *
+ * Several fields are an empty string when they do not apply (`fullName`,
+ * `marketRegion`, and `underlyingTicker` for option; `priceIndex` for linear).
+ */
+export interface InstrumentSummaryV5 {
+  symbol: string;
+  /** Instrument type. May be an empty string. */
+  symbolType: string;
+  /** Display name shown in the UI. */
+  displayName: string;
+  baseCoin: string;
+  settleCoin: string;
+  /** Full name. Empty string for `option`. */
+  fullName: string;
+  /**
+   * Market region of the underlying asset (`US`, `CN`, `HK`, `KR`, and others).
+   * Empty string for `option` or when not applicable.
+   */
+  marketRegion: string;
+  /**
+   * Stock ticker, security code, or asset symbol in the underlying market.
+   * Empty string for `option`.
+   */
+  underlyingTicker: string;
+  /**
+   * TradFi perpetual symbol used as the price index. NVDA options use `NVDAUSDT`.
+   * Empty string for `linear`.
+   */
+  priceIndex: string;
+  qtyStep: string;
+  tickSize: string;
+  /** Delivery timestamp in milliseconds. `"0"` for `linear`. */
+  deliveryTime: string;
+}
+
+export type InstrumentSummaryResponseV5 = CategoryCursorListV5<
+  InstrumentSummaryV5[],
+  'linear' | 'option'
+>;
 
 // Account Instruments Info (includes RPI permissions)
 export interface AccountSpotInstrumentInfoV5 extends SpotInstrumentInfoV5 {
