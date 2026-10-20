@@ -79,6 +79,46 @@ describe('Public V5 REST API Endpoints', () => {
       ).toMatchObject(successResponseObjectV3());
     });
 
+    it('getInstrumentSummary()', async () => {
+      const firstPage = await api.getInstrumentSummary({
+        category: 'linear',
+        limit: 1,
+      });
+      expect(firstPage).toMatchObject(successResponseObjectV3());
+      expect(firstPage.result.category).toBe('linear');
+      expect(firstPage.result.list).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            symbol: expect.any(String),
+            qtyStep: expect.any(String),
+            tickSize: expect.any(String),
+            deliveryTime: expect.any(String),
+          }),
+        ]),
+      );
+
+      const cursor = firstPage.result.nextPageCursor;
+      expect(typeof cursor).toBe('string');
+      expect(cursor && cursor.length).toBeGreaterThan(0);
+
+      const secondPage = await api.getInstrumentSummary({
+        category: 'linear',
+        limit: 1,
+        cursor,
+      });
+      expect(secondPage).toMatchObject(successResponseObjectV3());
+      expect(secondPage.result.list[0]?.symbol).not.toBe(
+        firstPage.result.list[0]?.symbol,
+      );
+
+      const optionPage = await api.getInstrumentSummary({
+        category: 'option',
+        limit: 1,
+      });
+      expect(optionPage).toMatchObject(successResponseObjectV3());
+      expect(optionPage.result.category).toBe('option');
+    });
+
     it('getOrderbook()', async () => {
       expect(
         await api.getOrderbook({

@@ -60,6 +60,27 @@ export interface GetInstrumentsInfoParamsV5 {
   cursor?: string;
 }
 
+/**
+ * GET /v5/market/instrument-summary
+ *
+ * `category` is required. Page with `cursor` = previous `nextPageCursor`.
+ */
+export interface GetInstrumentSummaryParamsV5 {
+  /** Product type. `linear` or `option`. */
+  category: 'linear' | 'option';
+  symbol?: string;
+  /** Instrument type. */
+  symbolType?: string;
+  /** Market region, for example `HK`, `US`, `CN`, `KR`. */
+  marketRegion?: string;
+  /** Base coin, for example `NVDA` or `TSLA`. */
+  baseCoin?: string;
+  /** Page size. Range [1, 1000]. Default 500. */
+  limit?: number;
+  /** Cursor. Use `nextPageCursor` from the previous response. */
+  cursor?: string;
+}
+
 export interface GetOrderbookParamsV5 {
   category: CategoryV5;
   symbol: string;

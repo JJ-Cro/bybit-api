@@ -332,8 +332,26 @@ export type TransactionTypeV5 =
   | 'PLATFORM_TOKEN_MNT_LIQRECALLEDMMNT'
   | 'PLATFORM_TOKEN_MNT_LIQRETURNEDMNT'
   | 'DIVIDEND_SETTLEMENT'
+  /**
+   * Forward stock split settlement. Closes the entire existing position; the
+   * new position is opened as `FORWARD_SPLIT_OPEN`.
+   *
+   * Changelog 2026-10-13 updated this description. The enum glossary still
+   * lists the older wording "fractional share settlement".
+   */
   | 'FORWARD_SPLIT_SETTLE'
-  | 'REVERSE_SPLIT_SETTLE';
+  /** Forward stock split position opening after the existing position is settled and closed. */
+  | 'FORWARD_SPLIT_OPEN'
+  /**
+   * Reverse stock split settlement. Closes the entire existing position; the
+   * new position is opened as `REVERSE_SPLIT_OPEN`.
+   *
+   * Changelog 2026-10-13 updated this description. The enum glossary still
+   * lists the older wording "fractional share settlement".
+   */
+  | 'REVERSE_SPLIT_SETTLE'
+  /** Reverse stock split position opening after the existing position is settled and closed. */
+  | 'REVERSE_SPLIT_OPEN';
 
 export type PermissionTypeV5 =
   | 'ContractTrade'
@@ -375,8 +393,20 @@ export type ExecTypeV5 =
   | 'MovePosition'
   /** @deprecated Removed from Bybit execType; kept for older payloads. */
   | 'CorporateAction'
+  /**
+   * Forward stock split settlement and closure of the entire existing position,
+   * followed by opening a new position (`ForwardSplitOpen`).
+   */
   | 'ForwardSplitSettle'
+  /** Forward stock split position opening after the existing position is settled and closed. */
+  | 'ForwardSplitOpen'
+  /**
+   * Reverse stock split settlement and closure of the entire existing position,
+   * followed by opening a new position (`ReverseSplitOpen`).
+   */
   | 'ReverseSplitSettle'
+  /** Reverse stock split position opening after the existing position is settled and closed. */
+  | 'ReverseSplitOpen'
   | 'Dividend'
   | 'UNKNOWN';
 

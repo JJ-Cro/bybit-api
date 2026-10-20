@@ -327,6 +327,7 @@ import {
   GetIndexPriceComponentsParamsV5,
   GetIndexPriceKlineParamsV5,
   GetInstrumentsInfoParamsV5,
+  GetInstrumentSummaryParamsV5,
   GetInsuranceParamsV5,
   GetInternalDepositRecordParamsV5,
   GetInternalTransferParamsV5,
@@ -434,6 +435,7 @@ import {
   InstitutionalLendingProductInfoV5,
   InstitutionalLoanLTVV5,
   InstrumentInfoResponseV5,
+  InstrumentSummaryResponseV5,
   InsuranceResponseV5,
   InternalDepositRecordV5,
   InternalTransferRecordV5,
@@ -1010,6 +1012,20 @@ export class RestClientV5 extends BaseRestClient {
     params: GetInstrumentsInfoParamsV5 & { category: C },
   ): Promise<APIResponseV3WithTime<InstrumentInfoResponseV5<C>>> {
     return this.get('/v5/market/instruments-info', params);
+  }
+
+  /**
+   * Query summary information and trading increments for linear and option instruments.
+   *
+   * Covers: Linear contract / Option
+   *
+   * `category` is required (`linear` or `option`). Page with `cursor` set to
+   * `nextPageCursor` from the previous response. `limit` is [1, 1000], default 500.
+   */
+  getInstrumentSummary(
+    params: GetInstrumentSummaryParamsV5,
+  ): Promise<APIResponseV3WithTime<InstrumentSummaryResponseV5>> {
+    return this.get('/v5/market/instrument-summary', params);
   }
 
   /**
@@ -3504,7 +3520,13 @@ export class RestClientV5 extends BaseRestClient {
   }
 
   /**
-   * Get max borrowable amount
+   * Get max borrowable amount.
+   *
+   * `maxLoan` can be `"0"` when spot margin mode is off, or when no collateral
+   * coins are enabled. The app can still show a borrow amount after a collateral
+   * coin is selected. Undocumented; Bybit API staff confirmed this on 15 Oct 2026.
+   * Check `getSpotMarginState()`, `setCollateralCoin()`
+   * (`POST /v5/account/set-collateral-switch`), and `toggleSpotMarginTrade()` first.
    */
   getMaxBorrowableAmount(
     params: GetMaxBorrowableAmountParamsV5,
