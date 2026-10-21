@@ -7,7 +7,7 @@
 [![last commit](https://img.shields.io/github/last-commit/sieblyio/bybit-api)][1]
 [![CodeFactor](https://www.codefactor.io/repository/github/sieblyio/bybit-api/badge)](https://www.codefactor.io/repository/github/sieblyio/bybit-api)
 [![Telegram](https://img.shields.io/badge/chat-on%20telegram-blue.svg)](https://t.me/nodetraders)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sieblyio/bybit-api)
+[![Bybit Tutorial](https://img.shields.io/badge/Bybit%20Tutorial-siebly.io-blue)](https://siebly.io/sdk/bybit/javascript/tutorial)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/bybit-api">
